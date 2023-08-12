@@ -41,18 +41,6 @@ namespace Snappy_Deluxe {
         public Vector2 Position {
             get { return position; }
         }
-
-        public int Speed {
-            get { return speed; }
-        }  
-
-        public int Velocity {
-            get { return velocity; }
-        } 
-
-        public bool Start {
-            get { return start; }
-        } 
         
 
         /** 
@@ -65,20 +53,23 @@ namespace Snappy_Deluxe {
          */
         public void Update(GameTime gameTime) {
 
+            // Game start logic
             KeyboardState keyboardState = Keyboard.GetState();
             if (keyboardState.IsKeyDown(Keys.Space)) {
                 start = true;
             }
 
-            if (start) {
-                float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-                position.Y += (speed * deltaTime) - (velocity * deltaTime); 
+            // Vertical movement logic
+            if (start) { 
+                float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds; 
+                float verticalTrajectory = (speed * deltaTime) - (velocity * deltaTime);
+                position.Y += verticalTrajectory; 
                 if(keyboardState.IsKeyDown(Keys.Space) && keyboardStateOld.IsKeyUp(Keys.Space)) {
                     velocity = MaxVelocity; 
                 }
                 velocity -= VelocityChange;
             }  
-            keyboardStateOld = keyboardState;
+            keyboardStateOld = keyboardState; 
         }   
         
     } 

@@ -58,7 +58,7 @@ namespace Snappy_Deluxe {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here  
+            // TODO: Add your update logic here
             player.Update(gameTime);
 
             base.Update(gameTime);
@@ -75,13 +75,8 @@ namespace Snappy_Deluxe {
 
             // Draw operation
             _spriteBatch.Begin();
-
-            // Draw background
             _spriteBatch.Draw(backgroundSprite, backgroundPos, Color.White);
-
-            // Draw player 
             _spriteBatch.Draw(playerSprite, playerPos, Color.White);
-
             _spriteBatch.End();
 
 
