@@ -21,6 +21,9 @@ namespace Snappy_Deluxe {
         private Texture2D backgroundSprite;
         private Texture2D playerSprite;
 
+        // Game Objects 
+        private Player player;
+
 
         public Game1() {
             _graphics = new GraphicsDeviceManager(this);
@@ -35,7 +38,10 @@ namespace Snappy_Deluxe {
             // Default Screensize
             _graphics.PreferredBackBufferWidth = DefaultWidth;
             _graphics.PreferredBackBufferHeight = DefaultHeight; 
-            _graphics.ApplyChanges(); 
+            _graphics.ApplyChanges();
+
+            // Initialize game objects 
+            player = new Player(_graphics);
             
             base.Initialize();
         }
@@ -52,8 +58,8 @@ namespace Snappy_Deluxe {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here 
-
+            // TODO: Add your update logic here  
+            player.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -65,7 +71,7 @@ namespace Snappy_Deluxe {
 
             // Variables for draw operation  
             Rectangle backgroundPos = new Rectangle(0, 0, DefaultWidth, DefaultHeight);
-            Rectangle playerPos = new Rectangle(HalfWidth - PlayerScale, HalfHeight - PlayerScale, PlayerScale, PlayerScale);
+            Rectangle playerPos = new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Radius, player.Radius);
 
             // Draw operation
             _spriteBatch.Begin();

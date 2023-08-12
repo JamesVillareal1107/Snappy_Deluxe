@@ -2,33 +2,38 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 
 namespace Snappy_Deluxe {
     internal class Player {
 
         // Constants 
         private const int DefaultRadius = 80;
-        private const int DefaultGravitySpeed = 5;
-        private const int DefaultJumpSpeed = 10;
+        private const int DefaultSpeed = 400;
+        private const int DefaultVelocity = 0; 
+        private const int MaxVelocity = 1000;
+        private const int VelocityChange = 35;
 
         // Instance variables
         private int radius;
         private Vector2 position;
-        private int gravitySpeed;
-        private int jumpSpeed;
-        private bool isDead;
+        private int speed;
+        private int velocity;
+        private bool start;
+        private KeyboardState keyboardStateOld;
 
-        // Constructor, set everything to default values
+        // Constructor, set every instance variable to default values
         public Player(GraphicsDeviceManager graphics) {
             radius = DefaultRadius;
-            position = new Vector2(graphics.PreferredBackBufferWidth / 2 - radius, graphics.PreferredBackBufferHeight / 2 - radius);
-            gravitySpeed = DefaultGravitySpeed;
-            jumpSpeed = DefaultJumpSpeed;
-            isDead = false;
+            position = new Vector2(graphics.PreferredBackBufferWidth/2 - radius, graphics.PreferredBackBufferHeight/2 - radius);
+            speed = DefaultSpeed;
+            velocity = DefaultVelocity;
+            start = false;  
+            keyboardStateOld = Keyboard.GetState(); 
         }
 
-        // Properties Getters
+        // Properties/Getters
         public int Radius{
             get { return radius; } 
         } 
@@ -37,25 +42,47 @@ namespace Snappy_Deluxe {
             get { return position; }
         }
 
-        public int GravitySpeed {
-            get { return gravitySpeed; }
+        public int Speed {
+            get { return speed; }
         }  
 
-        public int JumpSpeed {
-            get { return jumpSpeed; }
+        public int Velocity {
+            get { return velocity; }
         } 
 
-        public bool IsDead {
-            get { return isDead; }
+        public bool Start {
+            get { return start; }
         } 
+        
 
-        public void Update() {
+        /** 
+         * Update method: 
+         * 
+         * Runs every frame  
+         * simulates gravity and player jumping
+         * 
+         * @param gameTime 
+         */
+        public void Update(GameTime gameTime) {
 
-        } 
+            KeyboardState keyboardState = Keyboard.GetState();
+            if (keyboardState.IsKeyDown(Keys.Space)) {
+                start = true;
+            }
 
-        public void jump() {
+            if (start) {
+                float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                position.Y += (speed * deltaTime) - (velocity * deltaTime); 
+                if(keyboardState.IsKeyDown(Keys.Space) && keyboardStateOld.IsKeyUp(Keys.Space)) {
+                    velocity = MaxVelocity; 
+                }
+                velocity -= VelocityChange;
+            }  
+            keyboardStateOld = keyboardState;
+        }   
+        
+    } 
 
-        }
 
-    }
+
 }
