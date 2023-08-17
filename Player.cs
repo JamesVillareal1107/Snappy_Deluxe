@@ -14,6 +14,7 @@ namespace Snappy_Deluxe {
         private const int DefaultVelocity = 0; 
         private const int MaxVelocity = 1000;
         private const int VelocityChange = 35;
+        private const int xOffset = 100;
 
         // Instance variables
         private int radius;
@@ -23,10 +24,10 @@ namespace Snappy_Deluxe {
         private bool start;
         private KeyboardState keyboardStateOld;
 
-        // Constructor, set every instance variable to default values
+        // Constructor
         public Player(GraphicsDeviceManager graphics) {
             radius = DefaultRadius;
-            position = new Vector2(graphics.PreferredBackBufferWidth/2 - radius, graphics.PreferredBackBufferHeight/2 - radius);
+            position = new Vector2((graphics.PreferredBackBufferWidth/2-xOffset) - radius, graphics.PreferredBackBufferHeight/2 - radius);
             speed = DefaultSpeed;
             velocity = DefaultVelocity;
             start = false;  
@@ -47,19 +48,20 @@ namespace Snappy_Deluxe {
          * Update method: 
          * 
          * Runs every frame  
-         * simulates gravity and player jumping
+         * simulates gravity and player jumping 
+         * Starts game when prompted
          * 
          * @param gameTime 
          */
         public void Update(GameTime gameTime) {
 
-            // Game start logic
+            // Game start
             KeyboardState keyboardState = Keyboard.GetState();
             if (keyboardState.IsKeyDown(Keys.Space)) {
                 start = true;
             }
 
-            // Vertical movement logic
+            // Vertical movement
             if (start) { 
                 float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds; 
                 float verticalTrajectory = (speed * deltaTime) - (velocity * deltaTime);

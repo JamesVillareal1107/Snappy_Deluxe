@@ -20,9 +20,12 @@ namespace Snappy_Deluxe {
         // Sprites 
         private Texture2D backgroundSprite;
         private Texture2D playerSprite;
+        private Texture2D pipeDownSprite;
+        private Texture2D pipeUpSprite;
 
         // Game Objects 
         private Player player;
+        private Pipe testPipe;
 
 
         public Game1() {
@@ -40,9 +43,6 @@ namespace Snappy_Deluxe {
             _graphics.PreferredBackBufferHeight = DefaultHeight; 
             _graphics.ApplyChanges();
 
-            // Initialize game objects 
-            player = new Player(_graphics);
-            
             base.Initialize();
         }
 
@@ -52,6 +52,12 @@ namespace Snappy_Deluxe {
             // TODO: use this.Content to load your game content here 
             backgroundSprite = Content.Load<Texture2D>("Sprites/Background");
             playerSprite = Content.Load<Texture2D>("Sprites/Birds/Chicken/PNG/Chicken 1");
+            pipeDownSprite = Content.Load<Texture2D>("Sprites/Obstacle Pipe/Pipe Down");
+            pipeUpSprite = Content.Load<Texture2D>("Sprites/Obstacle Pipe/Pipe Up");
+
+            // Initialize game objects 
+            player = new Player(_graphics);
+            testPipe = new Pipe(pipeDownSprite);
         }
 
         protected override void Update(GameTime gameTime) {
@@ -60,6 +66,7 @@ namespace Snappy_Deluxe {
 
             // TODO: Add your update logic here
             player.Update(gameTime);
+            testPipe.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -72,14 +79,15 @@ namespace Snappy_Deluxe {
             // Variables for draw operation  
             Rectangle backgroundPos = new Rectangle(0, 0, DefaultWidth, DefaultHeight);
             Rectangle playerPos = new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Radius, player.Radius);
-
+            
             // Draw operation
             _spriteBatch.Begin();
+
             _spriteBatch.Draw(backgroundSprite, backgroundPos, Color.White);
             _spriteBatch.Draw(playerSprite, playerPos, Color.White);
+            testPipe.Draw(_spriteBatch);
+             
             _spriteBatch.End();
-
-
 
             base.Draw(gameTime);
         }
