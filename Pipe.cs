@@ -10,7 +10,7 @@ namespace Snappy_Deluxe {
         private const int defaultY = 760;
         private const int width = 130;
         private const int height = 800;
-        private const int halfWidth= 65;
+        private const int halfWidth = 65;
         private const int halfHeight = 400;
         private const int defaultSpeed = 300;
 
@@ -20,11 +20,12 @@ namespace Snappy_Deluxe {
         private int speed;
 
         // Constructors 
-        public Pipe(Texture2D sprite) {
+        public Pipe(Texture2D sprite, int xPosition, int yPosition) {
             this.sprite = sprite;
             this.speed = defaultSpeed;
-            this.position = new Vector2(defaultX, defaultY);
+            this.position = new Vector2(xPosition, yPosition);
         }
+        
 
         // Class Properties 
         public Texture2D Sprite{

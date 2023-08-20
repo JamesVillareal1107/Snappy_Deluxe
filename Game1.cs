@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
+using System;
 
 namespace Snappy_Deluxe {
 
@@ -12,6 +14,8 @@ namespace Snappy_Deluxe {
         private const int PlayerScale = 80; 
         private const int HalfWidth = DefaultWidth / 2;
         private const int HalfHeight = DefaultHeight / 2;
+        private const double TimerValue = 1.5;
+        private const int MaxPipeOffset = 180;
 
         // graphics devices
         private GraphicsDeviceManager _graphics;
@@ -25,7 +29,9 @@ namespace Snappy_Deluxe {
 
         // Game Objects 
         private Player player;
-        private Pipe testPipe;
+        private List<Pipe> pipesList;
+        private double timer;
+        private Random spawnOffset;
 
 
         public Game1() {
@@ -56,17 +62,36 @@ namespace Snappy_Deluxe {
             pipeUpSprite = Content.Load<Texture2D>("Sprites/Obstacle Pipe/Pipe Up");
 
             // Initialize game objects 
-            player = new Player(_graphics);
-            testPipe = new Pipe(pipeDownSprite);
+            player = new Player(_graphics); 
+            pipesList = new List<Pipe>();
+            timer = 0;
+            spawnOffset = new Random();
         }
 
         protected override void Update(GameTime gameTime) {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            // Update variables 
+            
+
             // TODO: Add your update logic here
+            
+            // Update player
             player.Update(gameTime);
-            testPipe.Update(gameTime);
+
+            // Spawn Pipes
+            timer -= gameTime.ElapsedGameTime.TotalSeconds;
+            if (timer <= 0) {
+                int spawnOffsetValue = spawnOffset.Next(-MaxPipeOffset, MaxPipeOffset);
+                PipeSpawner.SpawnPipesRandom(pipeUpSprite, pipeDownSprite, pipesList, spawnOffsetValue);
+                timer = TimerValue;
+            }
+
+            // Update every pipe
+            foreach (Pipe pipe in pipesList) {
+                pipe.Update(gameTime);
+            }
 
             base.Update(gameTime);
         }
@@ -84,9 +109,12 @@ namespace Snappy_Deluxe {
             _spriteBatch.Begin();
 
             _spriteBatch.Draw(backgroundSprite, backgroundPos, Color.White);
-            _spriteBatch.Draw(playerSprite, playerPos, Color.White);
-            testPipe.Draw(_spriteBatch);
-             
+            _spriteBatch.Draw(playerSprite, playerPos, Color.White); 
+
+            foreach (Pipe pipe in pipesList) {
+                pipe.Draw(_spriteBatch);
+            }
+
             _spriteBatch.End();
 
             base.Draw(gameTime);
