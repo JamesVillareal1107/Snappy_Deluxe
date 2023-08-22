@@ -745,6 +745,13 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/UI/Score Big/9.png
 
+#begin Sprites/UI/Score Font.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Sprites/UI/Score Font.spritefont
+
 #begin Sprites/UI/Score Small/0.png
 /importer:TextureImporter
 /processor:TextureProcessor

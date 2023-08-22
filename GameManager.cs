@@ -76,7 +76,7 @@ namespace Snappy_Deluxe{
                 startOfGame = true;
             }
 
-            //TODO Condition if we are in the main game loop 
+            //TODO: Condition if we are in the main game loop 
             if(inGameLoop){
                
                 // Start/setup main game loop 
@@ -116,7 +116,7 @@ namespace Snappy_Deluxe{
          *
          */
        public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D backgroundSprite, Player player, Random spawnOffset,
-               List<Pipe> pipesList, SpriteFont scoreSprite){ 
+               List<Pipe> pipesList, SpriteFont spriteFont){ 
             
             // Drawing variables 
             Rectangle backgroundPosition = new Rectangle(0,0,DefaultWidth,DefaultHeight); 
@@ -127,12 +127,15 @@ namespace Snappy_Deluxe{
             player.Draw(spriteBatch);
 
             // Draw Based on game condition 
-                if(inGameLoop){
-                    foreach(Pipe pipe in pipesList){ 
-                        pipe.Draw(spriteBatch);
-                    } 
-                    spriteBatch.DrawString(scoreSprite, score.ToString(), scorePosition, Color.White);
-                }
+            if(inGameLoop){
+                foreach(Pipe pipe in pipesList){ 
+                    pipe.Draw(spriteBatch);
+                } 
+                spriteBatch.DrawString(spriteFont, score.ToString(), scorePosition, Color.White);
+            }
+            else {
+                spriteBatch.DrawString(spriteFont, "Snappy Deluxe", scorePosition, Color.White);
+            }
        }
 
        /**

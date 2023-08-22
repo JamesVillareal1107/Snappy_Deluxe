@@ -77,10 +77,29 @@ namespace Snappy_Deluxe {
             }  
             keyboardStateOld = keyboardState; 
         }  
-
+        
+        /** 
+         * Draw Method: 
+         *
+         * Draws Player Character when 
+         * called 
+         *
+         */
         public void Draw(SpriteBatch spriteBatch){ 
             Rectangle playerPosition = new Rectangle((int)position.X,(int)position.Y,PlayerScale,PlayerScale);
             spriteBatch.Draw(playerSprite,playerPosition,Color.White);
+        }
+
+        /** 
+         * SetDefaultPosition Method: 
+         *
+         * reverts player position back 
+         * to default position 
+         *
+         */
+        public void SetDefaultPosition(GraphicsDeviceManager graphics){ 
+            this.position.X = (graphics.PreferredBackBufferWidth/2-xOffset) - radius;   
+            this.position.Y = (graphics.PreferredBackBufferHeight/2) - radius;
         }
         
     } 

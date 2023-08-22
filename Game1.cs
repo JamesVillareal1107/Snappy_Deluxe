@@ -16,13 +16,17 @@ namespace Snappy_Deluxe {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        // Sprites 
+        // Sprites & SpriteFonts
         private Texture2D backgroundSprite;
         private Texture2D playerSprite;
         private Texture2D pipeDownSprite;
-        private Texture2D pipeUpSprite;
+        private Texture2D pipeUpSprite; 
+        private SpriteFont scoreSpriteFont;
 
-        // Game Objects 
+        // Game Objects
+        private Player player; 
+        private Random spawnOffset; 
+        private List<Pipe> pipesList;
         private GameManager gameState;
 
         // Constructor
@@ -51,10 +55,14 @@ namespace Snappy_Deluxe {
             backgroundSprite = Content.Load<Texture2D>("Sprites/Background");
             playerSprite = Content.Load<Texture2D>("Sprites/Birds/Chicken/PNG/Chicken 1");
             pipeDownSprite = Content.Load<Texture2D>("Sprites/Obstacle Pipe/Pipe Down");
-            pipeUpSprite = Content.Load<Texture2D>("Sprites/Obstacle Pipe/Pipe Up");
+            pipeUpSprite = Content.Load<Texture2D>("Sprites/Obstacle Pipe/Pipe Up"); 
+            scoreSpriteFont = Content.Load<SpriteFont>("Sprites/UI/Score Font");
 
             // Initialize game objects 
-            gameState = new GameManager(_graphics,playerSprite);
+            player = new Player(_graphics, playerSprite);
+            spawnOffset = new Random();
+            pipesList = new List<Pipe>();
+            gameState = new GameManager();
         }
 
         protected override void Update(GameTime gameTime) {
@@ -62,7 +70,7 @@ namespace Snappy_Deluxe {
                 Exit();
 
             // TODO: Add your update logic here 
-            gameState.Update(gameTime);
+            gameState.Update(gameTime, _graphics, player, spawnOffset, pipesList, pipeUpSprite, pipeDownSprite);
             
             base.Update(gameTime);
         }
@@ -71,11 +79,8 @@ namespace Snappy_Deluxe {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here 
-
             _spriteBatch.Begin(); 
-
-            gameState.Draw(_spriteBatch,backgroundSprite); 
-
+            gameState.Draw(_graphics,_spriteBatch, backgroundSprite, player, spawnOffset, pipesList, scoreSpriteFont); 
             _spriteBatch.End();
 
             base.Draw(gameTime);
