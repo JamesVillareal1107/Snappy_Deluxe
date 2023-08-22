@@ -17,13 +17,15 @@ namespace Snappy_Deluxe {
         // Instance Variables
         private Texture2D sprite;
         private Vector2 position;
-        private int speed;
+        private int speed; 
+        private bool deleted;
 
         // Constructors 
         public Pipe(Texture2D sprite, int xPosition, int yPosition) {
             this.sprite = sprite;
             this.speed = defaultSpeed;
             this.position = new Vector2(xPosition, yPosition);
+            this.deleted = false;
         }
         
 
@@ -41,6 +43,11 @@ namespace Snappy_Deluxe {
         public int Speed {
             get { return speed; }
             set { speed = value; }
+        } 
+
+        public bool Deleted{ 
+            get { return deleted; }
+            set { deleted = value; }
         }
 
         // Class Methods

@@ -14,9 +14,10 @@ namespace Snappy_Deluxe{
         private const double DefaultTime = 1.5;
         private const int DefaultScore = 0;
         private const int MaxSpawnOffset = 180; 
-        private const int TopTextPosition = 5; 
-        private const int FontRadius = 45;
+        private const int ScoreYPosition = 5; 
+        private const int FontRadius = 45; 
         private const int TitleRadius = 293;
+        private const int PipeDeletionPoint = -620; 
 
         // Instance Variables
         private bool inGameLoop;
@@ -65,6 +66,11 @@ namespace Snappy_Deluxe{
         public void Update(GameTime gameTime, GraphicsDeviceManager graphics, Player player, Random spawnOffset,
                 List<Pipe> pipesList, Texture2D topPipeSprite, Texture2D bottomPipeSprite){ 
             
+            // condition if we are in the main menu 
+            if(!inGameLoop){ 
+                player.Position = new Vector2(DefaultWidth/2-player.Radius, DefaultHeight/2-player.Radius);
+            } 
+
             // Game Start logic 
             KeyboardState keyboardState = Keyboard.GetState();
             if(keyboardState.IsKeyDown(Keys.Space) && !inGameLoop){
@@ -96,8 +102,9 @@ namespace Snappy_Deluxe{
                 foreach(Pipe pipe in pipesList){
                     pipe.Update(gameTime);
                     ScoreCheck(player,pipe);  
+                    DeletePipe(pipe,pipesList); 
                 }
-
+                pipesList.RemoveAll(p => p.Deleted);
             }
 
         }
@@ -115,8 +122,8 @@ namespace Snappy_Deluxe{
             
             // Drawing variables 
             Rectangle backgroundPosition = new Rectangle(0,0,DefaultWidth,DefaultHeight); 
-            Vector2 textPosition = new Vector2((graphics.PreferredBackBufferWidth/2) - FontRadius, TopTextPosition);
-            Vector2 titlePosition = new Vector2((graphics.PreferredBackBufferWidth/2) - TitleRadius, TopTextPosition);
+            Vector2 scorePosition = new Vector2((graphics.PreferredBackBufferWidth/2) - FontRadius, ScoreYPosition); 
+            Vector2 textPosition = new Vector2((graphics.PreferredBackBufferWidth/2) - TitleRadius, ScoreYPosition);
 
             // Always draw background and player
             spriteBatch.Draw(backgroundSprite, backgroundPosition, Color.White);  
@@ -127,10 +134,10 @@ namespace Snappy_Deluxe{
                 foreach(Pipe pipe in pipesList){ 
                     pipe.Draw(spriteBatch);
                 } 
-                spriteBatch.DrawString(spriteFont, score.ToString(), textPosition, Color.White);
+                spriteBatch.DrawString(spriteFont, score.ToString(), scorePosition, Color.White); 
             }
             else {
-                spriteBatch.DrawString(spriteFont, "Snappy Deluxe", titlePosition, Color.White);
+                spriteBatch.DrawString(spriteFont, "Snappy Deluxe", textPosition, Color.White);
             }
        }
 
@@ -147,6 +154,19 @@ namespace Snappy_Deluxe{
                 return true;
             }  
             return false;
+       }
+       
+       /**
+        * DeletePipe method: 
+        *
+        * Given a pipe, if it meets a certain x position 
+        * the pipe object is removed from the game 
+        *
+        */
+       public void DeletePipe(Pipe pipe, List<Pipe> pipesList){ 
+            if(pipe.Position.X == PipeDeletionPoint){ 
+                pipe.Deleted = true;
+            }
        }
 
 	}	
