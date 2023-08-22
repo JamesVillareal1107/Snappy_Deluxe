@@ -9,12 +9,13 @@ namespace Snappy_Deluxe {
     internal class Player {
 
         // Constants 
-        private const int DefaultRadius = 80;
+        private const int DefaultRadius = 40;
         private const int DefaultSpeed = 400;
         private const int DefaultVelocity = 0; 
         private const int MaxVelocity = 1000;
         private const int VelocityChange = 35;
         private const int xOffset = 100;
+        private const int PlayerScale = 80;
 
         // Instance variables
         private int radius;
@@ -23,15 +24,17 @@ namespace Snappy_Deluxe {
         private int velocity;
         private bool start;
         private KeyboardState keyboardStateOld;
+        private Texture2D playerSprite;
 
         // Constructor
-        public Player(GraphicsDeviceManager graphics) {
+        public Player(GraphicsDeviceManager graphics, Texture2D playerSprite) {
             radius = DefaultRadius;
             position = new Vector2((graphics.PreferredBackBufferWidth/2-xOffset) - radius, graphics.PreferredBackBufferHeight/2 - radius);
             speed = DefaultSpeed;
             velocity = DefaultVelocity;
             start = false;  
-            keyboardStateOld = Keyboard.GetState(); 
+            keyboardStateOld = Keyboard.GetState();
+            this.playerSprite = playerSprite; 
         }
 
         // Properties/Getters
@@ -40,7 +43,8 @@ namespace Snappy_Deluxe {
         } 
         
         public Vector2 Position {
-            get { return position; }
+            get { return position; } 
+            set { position = value; }
         }
         
 
@@ -72,10 +76,13 @@ namespace Snappy_Deluxe {
                 velocity -= VelocityChange;
             }  
             keyboardStateOld = keyboardState; 
-        }   
+        }  
+
+        public void Draw(SpriteBatch spriteBatch){ 
+            Rectangle playerPosition = new Rectangle((int)position.X,(int)position.Y,PlayerScale,PlayerScale);
+            spriteBatch.Draw(playerSprite,playerPosition,Color.White);
+        }
         
     } 
-
-
 
 }
