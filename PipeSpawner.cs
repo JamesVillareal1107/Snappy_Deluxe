@@ -8,7 +8,7 @@ namespace Snappy_Deluxe {
     internal static class PipeSpawner {
 
         // Constants 
-        private const int positionX = 1900;
+        private const int positionX = 1580;
         private const int positionY = 360;
         private const int offset = 500;
 
