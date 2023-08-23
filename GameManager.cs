@@ -17,20 +17,21 @@ namespace Snappy_Deluxe{
         private const int ScoreYPosition = 5; 
         private const int FontRadius = 45; 
         private const int TitleRadius = 293;
-        private const int PipeDeletionPoint = -620; 
+        private const int PipeDeletionPoint = -300;  
+        private const int DefaultStartTime = 1;
 
         // Instance Variables
         private bool inGameLoop;
         private bool startOfGame;
-        private double timer; 
-        private double score;
+        private double spawnTimer; 
+        private double score;  
 
         // Constructors
         public GameManager(){ 
             inGameLoop = false;
             startOfGame = false;
-            timer = DefaultTime;
-            score = DefaultScore;
+            spawnTimer = DefaultTime;
+            score = DefaultScore; 
         }
 
         // Properties 
@@ -44,9 +45,9 @@ namespace Snappy_Deluxe{
             set { startOfGame = value; }
         }
 
-        public double Timer{ 
-            get { return timer; } 
-            set { timer = value; }
+        public double SpawnTimer{ 
+            get { return spawnTimer; } 
+            set { spawnTimer = value; }
         }
 
         public double Score{ 
@@ -82,7 +83,7 @@ namespace Snappy_Deluxe{
             if(inGameLoop){
                
                 // Start/setup main game loop 
-                if(startOfGame){ 
+                if(startOfGame){  
                     startOfGame = false;
                     PipeSpawner.SpawnPipes(topPipeSprite, bottomPipeSprite, pipesList);
                 }
@@ -91,11 +92,11 @@ namespace Snappy_Deluxe{
                 player.Update(gameTime);
 
                 // Spawn Pipes
-                timer -= gameTime.ElapsedGameTime.TotalSeconds;
-                if(timer <= 0){
+                spawnTimer -= gameTime.ElapsedGameTime.TotalSeconds;
+                if(spawnTimer <= 0){
                     int spawnPoint = spawnOffset.Next(-MaxSpawnOffset,MaxSpawnOffset); 
                     PipeSpawner.SpawnPipesRandom(topPipeSprite, bottomPipeSprite, pipesList, spawnPoint);
-                    timer = DefaultTime;    
+                    spawnTimer = DefaultTime;    
                 }
 
                 // Update Pipes and increment score when applicable
@@ -123,7 +124,7 @@ namespace Snappy_Deluxe{
             // Drawing variables 
             Rectangle backgroundPosition = new Rectangle(0,0,DefaultWidth,DefaultHeight); 
             Vector2 scorePosition = new Vector2((graphics.PreferredBackBufferWidth/2) - FontRadius, ScoreYPosition); 
-            Vector2 textPosition = new Vector2((graphics.PreferredBackBufferWidth/2) - TitleRadius, ScoreYPosition);
+            Vector2 textPosition = new Vector2((graphics.PreferredBackBufferWidth/2) - TitleRadius, ScoreYPosition);  
 
             // Always draw background and player
             spriteBatch.Draw(backgroundSprite, backgroundPosition, Color.White);  
@@ -134,7 +135,7 @@ namespace Snappy_Deluxe{
                 foreach(Pipe pipe in pipesList){ 
                     pipe.Draw(spriteBatch);
                 } 
-                spriteBatch.DrawString(spriteFont, score.ToString(), scorePosition, Color.White); 
+                spriteBatch.DrawString(spriteFont, score.ToString(), scorePosition, Color.White);  
             }
             else {
                 spriteBatch.DrawString(spriteFont, "Snappy Deluxe", textPosition, Color.White);
@@ -164,7 +165,7 @@ namespace Snappy_Deluxe{
         *
         */
        public void DeletePipe(Pipe pipe, List<Pipe> pipesList){ 
-            if(pipe.Position.X == PipeDeletionPoint){ 
+            if(pipe.Position.X <= PipeDeletionPoint){ 
                 pipe.Deleted = true;
             }
        }
