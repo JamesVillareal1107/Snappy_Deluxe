@@ -8,24 +8,28 @@ namespace Snappy_Deluxe {
         // Constants 
         private const int defaultX = 1000;
         private const int defaultY = 760;
-        private const int width = 130;
+        private const int DefaultHalfWidth = 65;
+        private const int DefaultHalfHeight = 400;
+        private const int defaultSpeed = 300; 
+        private const int width = 130; 
         private const int height = 800;
-        private const int halfWidth = 65;
-        private const int halfHeight = 400;
-        private const int defaultSpeed = 300;
 
         // Instance Variables
         private Texture2D sprite;
         private Vector2 position;
         private int speed; 
-        private bool deleted;
+        private bool deleted; 
+        private int halfWidth; 
+        private int halfHeight;
 
         // Constructors 
         public Pipe(Texture2D sprite, int xPosition, int yPosition) {
             this.sprite = sprite;
             this.speed = defaultSpeed;
             this.position = new Vector2(xPosition, yPosition);
-            this.deleted = false;
+            this.deleted = false; 
+            this.halfWidth = DefaultHalfWidth;
+            this.halfHeight = DefaultHalfHeight;
         }
         
 
@@ -48,6 +52,16 @@ namespace Snappy_Deluxe {
         public bool Deleted{ 
             get { return deleted; }
             set { deleted = value; }
+        } 
+
+        public int HalfWidth{ 
+            get { return halfWidth; }
+            set { halfWidth = value; }
+        } 
+
+        public int HalfHeight{ 
+            get { return halfHeight; }
+            set { halfHeight = value; }
         }
 
         // Class Methods

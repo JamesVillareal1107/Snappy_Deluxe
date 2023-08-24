@@ -87,7 +87,20 @@ namespace Snappy_Deluxe {
         public void Draw(SpriteBatch spriteBatch){ 
             Rectangle playerPosition = new Rectangle((int)position.X,(int)position.Y,PlayerScale,PlayerScale);
             spriteBatch.Draw(playerSprite,playerPosition,Color.White);
+        } 
+
+        /**
+         * SetDefaultPosition Method: 
+         * 
+         * resets player position back to the default position 
+         *
+         */
+        public void SetDefaultPosition(GraphicsDeviceManager graphics){ 
+            this.position.X = (graphics.PreferredBackBufferWidth/2) - radius; 
+            this.position.Y = (graphics.PreferredBackBufferHeight/2) - radius;
         }
+          
+        
 
     } 
 

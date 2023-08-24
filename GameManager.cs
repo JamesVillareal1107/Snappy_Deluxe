@@ -4,8 +4,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic; 
 using System;
+using Microsoft.Xna.Framework.Media;
+using System.Runtime.InteropServices;
 
-namespace Snappy_Deluxe{ 
+namespace Snappy_Deluxe; 
 	internal class GameManager { 
         
         // Constants 
@@ -65,12 +67,7 @@ namespace Snappy_Deluxe{
          *
          */
         public void Update(GameTime gameTime, GraphicsDeviceManager graphics, Player player, Random spawnOffset,
-                List<Pipe> pipesList, Texture2D topPipeSprite, Texture2D bottomPipeSprite){ 
-            
-            // condition if we are in the main menu 
-            if(!inGameLoop){ 
-                player.Position = new Vector2(DefaultWidth/2-player.Radius, DefaultHeight/2-player.Radius);
-            } 
+                List<Pipe> pipesList, Texture2D topPipeSprite, Texture2D bottomPipeSprite){
 
             // Game Start logic 
             KeyboardState keyboardState = Keyboard.GetState();
@@ -103,12 +100,23 @@ namespace Snappy_Deluxe{
                 foreach(Pipe pipe in pipesList){
                     pipe.Update(gameTime);
                     ScoreCheck(player,pipe);  
-                    DeletePipe(pipe,pipesList); 
-                }
-                pipesList.RemoveAll(p => p.Deleted);
-            }
+                    DeletePipe(pipe,pipesList);  
+                    if(CollisionDetected(player,pipe)){
+                        inGameLoop = false; 
+                        spawnTimer = DefaultTime; 
+                        score = DefaultScore;
+                        player.SetDefaultPosition(graphics);
+                        foreach (Pipe remainingPipe in pipesList){ 
+                            remainingPipe.Deleted = true;
+                        } 
+                    }
+                } 
 
-        }
+            } 
+            // Delete all pipes
+            pipesList.RemoveAll(p => p.Deleted);
+
+    }
        
         /**
          * Draw Method: 
@@ -164,11 +172,52 @@ namespace Snappy_Deluxe{
         * the pipe object is removed from the game 
         *
         */
-       public void DeletePipe(Pipe pipe, List<Pipe> pipesList){ 
+        public void DeletePipe(Pipe pipe, List<Pipe> pipesList){ 
             if(pipe.Position.X <= PipeDeletionPoint){ 
                 pipe.Deleted = true;
             }
-       }
+        } 
+      
+        /**
+         * CollisionDetected:
+         * 
+         * Detects a collision between the player object and the 
+         * pipe object 
+         *
+         */
+        public bool CollisionDetected(Player player, Pipe pipe){    
 
-	}	
+            // check if the player is in the same x area as the pipe
+            bool inXArea = false;  
+            int pipeLeftMaximum = (int)pipe.Position.X - pipe.HalfWidth;
+            int pipeRightMaximum = (int)pipe.Position.X + pipe.HalfWidth; 
+            int playerLeftCheck = (int)(player.Position.X + player.Radius);
+            int playerRightCheck = (int)(player.Position.X - player.Radius);
+            if (playerLeftCheck > pipeLeftMaximum && playerRightCheck < pipeRightMaximum){
+                inXArea = true;
+            }
+
+            // Determine if pipe is above or below the player 
+            bool abovePlayer = false; 
+            if(pipe.Position.Y < player.Position.Y){ 
+                abovePlayer = true;
+            }  
+
+            // Determine if a collision took place 
+            if(inXArea && abovePlayer){ 
+                int yCollisionVal = (int)(pipe.Position.Y + pipe.HalfHeight); 
+                if(player.Position.Y < yCollisionVal){ 
+                    return true;
+                }
+            } 
+            else if(inXArea && !abovePlayer){
+                int yCollisionVal = (int)(pipe.Position.Y - pipe.HalfHeight); 
+                if(player.Position.Y > yCollisionVal){
+                    return true;
+                }
+            }
+
+            // Default return value (no collision took place)            
+            return false;             
+	    }	
 }
