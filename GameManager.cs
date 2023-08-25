@@ -20,20 +20,25 @@ namespace Snappy_Deluxe;
         private const int FontRadius = 45; 
         private const int TitleRadius = 293;
         private const int PipeDeletionPoint = -300;  
-        private const int DefaultStartTime = 1;
+        private const int HighScoreRadius = 288; 
+        private const int HighScoreYPositionOffset = 150;
+        private const double ScoreValue = 0.5;
 
         // Instance Variables
         private bool inGameLoop;
         private bool startOfGame;
         private double spawnTimer; 
-        private double score;  
+        private double score; 
+        private double highScore;  
+ 
 
         // Constructors
         public GameManager(){ 
             inGameLoop = false;
             startOfGame = false;
             spawnTimer = DefaultTime;
-            score = DefaultScore; 
+            score = DefaultScore;
+            highScore = DefaultScore;
         }
 
         // Properties 
@@ -132,7 +137,8 @@ namespace Snappy_Deluxe;
             // Drawing variables 
             Rectangle backgroundPosition = new Rectangle(0,0,DefaultWidth,DefaultHeight); 
             Vector2 scorePosition = new Vector2((graphics.PreferredBackBufferWidth/2) - FontRadius, ScoreYPosition); 
-            Vector2 textPosition = new Vector2((graphics.PreferredBackBufferWidth/2) - TitleRadius, ScoreYPosition);  
+            Vector2 titlePosition = new Vector2((graphics.PreferredBackBufferWidth/2) - TitleRadius, ScoreYPosition);  
+            Vector2 highScorePosition = new Vector2((graphics.PreferredBackBufferWidth / 2) - HighScoreRadius, (graphics.PreferredBackBufferHeight / 2) + HighScoreYPositionOffset); 
 
             // Always draw background and player
             spriteBatch.Draw(backgroundSprite, backgroundPosition, Color.White);  
@@ -146,7 +152,8 @@ namespace Snappy_Deluxe;
                 spriteBatch.DrawString(spriteFont, score.ToString(), scorePosition, Color.White);  
             }
             else {
-                spriteBatch.DrawString(spriteFont, "Snappy Deluxe", textPosition, Color.White);
+                spriteBatch.DrawString(spriteFont, "Snappy Deluxe", titlePosition, Color.White);
+                spriteBatch.DrawString(spriteFont, "High Score: " + highScore.ToString(), highScorePosition, Color.White);
             }
        }
 
@@ -159,7 +166,10 @@ namespace Snappy_Deluxe;
         */
        public bool ScoreCheck(Player player, Pipe pipe){ 
             if(player.Position.X == pipe.Position.X){
-                score += 0.5; 
+                score += ScoreValue;  
+                if(score > highScore){ 
+                    highScore = score;
+                }
                 return true;
             }  
             return false;
@@ -178,7 +188,7 @@ namespace Snappy_Deluxe;
             }
         } 
       
-        /**
+        /** TODO: Update collision Logic
          * CollisionDetected:
          * 
          * Detects a collision between the player object and the 
