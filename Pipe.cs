@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace Snappy_Deluxe {
-    internal class Pipe {
+    internal class  Pipe {
 
         // Constants 
         private const int defaultX = 1000;
@@ -87,7 +87,7 @@ namespace Snappy_Deluxe {
         public void Draw(SpriteBatch spriteBatch) { 
             Rectangle drawPosition = new Rectangle((int)position.X-halfWidth, (int)position.Y-halfHeight, width, height);
             spriteBatch.Draw(sprite, drawPosition, Color.White);
-        }
+        } 
 
     }
 }

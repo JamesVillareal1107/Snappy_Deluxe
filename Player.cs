@@ -69,7 +69,7 @@ namespace Snappy_Deluxe {
                 float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds; 
                 float verticalTrajectory = (speed * deltaTime) - (velocity * deltaTime);
                 position.Y += verticalTrajectory; 
-                if(keyboardState.IsKeyDown(Keys.Space) && keyboardStateOld.IsKeyUp(Keys.Space)) {
+                if(keyboardState.IsKeyDown(Keys.Space) && keyboardStateOld.IsKeyUp(Keys.Space) && position.Y > 0) {
                     velocity = MaxVelocity; 
                 }
                 velocity -= VelocityChange;
