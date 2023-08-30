@@ -1,7 +1,8 @@
 ﻿// Namespaces
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input; 
+using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 
@@ -23,17 +24,19 @@ namespace Snappy_Deluxe {
         private int velocity;
         private bool start;
         private KeyboardState keyboardStateOld;
-        private Texture2D playerSprite;
+        private List<Texture2D> sprites;
+        private Texture2D currentSprite;
 
         // Constructor
-        public Player(GraphicsDeviceManager graphics, Texture2D playerSprite) {
+        public Player(GraphicsDeviceManager graphics, List<Texture2D> sprites) {
             radius = DefaultRadius;
             position = new Vector2((graphics.PreferredBackBufferWidth/2) - radius, graphics.PreferredBackBufferHeight/2 - radius);
             speed = DefaultSpeed;
             velocity = DefaultVelocity;
             start = false;  
             keyboardStateOld = Keyboard.GetState();
-            this.playerSprite = playerSprite; 
+            this.sprites = sprites;
+            currentSprite = sprites[0];
         }
 
         // Properties/Getters
@@ -56,7 +59,10 @@ namespace Snappy_Deluxe {
          * 
          * @param gameTime 
          */
-        public void Update(GameTime gameTime) {
+        public void Update(GameTime gameTime) { 
+            
+            // Change skins if applicable 
+            setCurrentSprite();
 
             // Game start
             KeyboardState keyboardState = Keyboard.GetState();
@@ -86,7 +92,7 @@ namespace Snappy_Deluxe {
          */
         public void Draw(SpriteBatch spriteBatch){ 
             Rectangle playerPosition = new Rectangle((int)position.X,(int)position.Y,PlayerScale,PlayerScale);
-            spriteBatch.Draw(playerSprite,playerPosition,Color.White);
+            spriteBatch.Draw(currentSprite,playerPosition,Color.White);
         } 
 
         /**
@@ -99,9 +105,54 @@ namespace Snappy_Deluxe {
             this.position.X = (graphics.PreferredBackBufferWidth/2) - radius; 
             this.position.Y = (graphics.PreferredBackBufferHeight/2) - radius;
         }
+        
+        /**
+         * SetCurrentSprite Method:
+         *
+         * changes the current sprite based on
+         * keyboard input (Arrow keys)
+         *
+         * @param: N/A
+         * @return: N/A
+         */
+        public void SetCurrentSprite() {
+            
+            // Variables
+            int size = sprites.Count;
+            int currentIndex = sprites.IndexOf(currentSprite);
+            KeyboardState keyboardState = Keyboard.GetState(); 
+            
+            // Change skins
+            if (start) {
+                if (keyboardState.IsKeyDown(Keys.Up) && keyboardState.IsKeyUp(Keys.Up)) {
+                    if (currentIndex >= size - 1) {
+                        currentSprite = sprites[0];
+                        keyboardStateOld = keyboardState;
+                        return;
+                    }
+                    else {
+                        currentSprite = sprites[currentIndex + 1]; 
+                        keyboardStateOld = keyboardState;
+                        return;
+                    }
+                } 
+                else if (keyboardState.IsKeyDown(Keys.Down) && keyboardState.IsKeyUp(Keys.Down)) {
+                    if (currentIndex <= 0) {
+                        currentSprite = sprites[size - 1];
+                        keyboardStateOld = keyboardState;
+                        return;
+                    }
+                    else {
+                        currentSprite = sprites[currentIndex - 1]; 
+                        keyboardStateOld = keyboardState;
+                        return;
+                    }
+                        
+                }
+            }
+        }
           
         
-
     } 
 
 }

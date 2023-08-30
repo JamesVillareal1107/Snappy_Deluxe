@@ -12,7 +12,10 @@ namespace Snappy_Deluxe {
         private const int DefaultHalfHeight = 400;
         private const int defaultSpeed = 300; 
         private const int width = 130; 
-        private const int height = 800;
+        private const int height = 800; 
+        
+        // Static variables 
+        
 
         // Instance Variables
         private Texture2D sprite;

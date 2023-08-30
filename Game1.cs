@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
 
+// TODO: implement sprite list
 namespace Snappy_Deluxe {
 
     public class Game1 : Game {
@@ -18,7 +19,7 @@ namespace Snappy_Deluxe {
 
         // Sprites & SpriteFonts
         private Texture2D backgroundSprite;
-        private Texture2D playerSprite;
+        private Texture2D chickenSprite;
         private Texture2D pipeDownSprite;
         private Texture2D pipeUpSprite;
         private Texture2D groundSprite;
@@ -29,7 +30,7 @@ namespace Snappy_Deluxe {
         private Random spawnOffset; 
         private List<Pipe> pipesList;
         private GameManager gameState;
-        private Ground testGround;
+        private GroundManager grounds;
 
         // Constructor
         public Game1() {
@@ -66,7 +67,7 @@ namespace Snappy_Deluxe {
             spawnOffset = new Random();
             pipesList = new List<Pipe>();
             gameState = new GameManager();
-            testGround = new Ground(new Vector2(_graphics.PreferredBackBufferWidth/2, _graphics.PreferredBackBufferHeight - 24), 300, groundSprite);
+            grounds = new GroundManager(groundSprite);
         }
 
         protected override void Update(GameTime gameTime) {
@@ -74,7 +75,8 @@ namespace Snappy_Deluxe {
                 Exit();
 
             // TODO: Add your update logic here 
-            gameState.Update(gameTime, _graphics, player, spawnOffset, pipesList, pipeUpSprite, pipeDownSprite); 
+            gameState.Update(gameTime, _graphics, player, spawnOffset, pipesList, pipeUpSprite, pipeDownSprite);
+            grounds.Update(gameTime, _graphics);
             
             base.Update(gameTime);
         }
@@ -84,8 +86,8 @@ namespace Snappy_Deluxe {
 
             // TODO: Add your drawing code here 
             _spriteBatch.Begin(); 
-            gameState.Draw(_graphics,_spriteBatch, backgroundSprite, player, spawnOffset, pipesList, scoreSpriteFont);
-            testGround.Draw(_spriteBatch);
+            gameState.Draw(_graphics,_spriteBatch, backgroundSprite, player, spawnOffset, pipesList, scoreSpriteFont); 
+            grounds.Draw(_spriteBatch); 
             _spriteBatch.End();
 
             base.Draw(gameTime);

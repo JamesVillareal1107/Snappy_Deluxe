@@ -24,6 +24,7 @@ namespace Snappy_Deluxe {
         private const int HighScoreYPositionOffset = 150;
         private const double ScoreValue = 0.5;
         private const int CollisionOffset = 20;
+        private const int GroundCollision = 96;
 
         // Instance Variables
         private bool inGameLoop;
@@ -202,7 +203,7 @@ namespace Snappy_Deluxe {
         public bool CollisionDetected(GraphicsDeviceManager graphics, Player player, Pipe pipe) {
 
             // Return true if player is out of bounds on the Y position 
-            if (player.Position.Y >= graphics.PreferredBackBufferHeight) {
+            if (player.Position.Y >= graphics.PreferredBackBufferHeight - GroundCollision) {
                 return true;
             }
 
