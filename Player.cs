@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input; 
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 
@@ -48,7 +49,11 @@ namespace Snappy_Deluxe {
             get { return position; } 
             set { position = value; }
         }
-        
+
+        public bool Start {
+            get { return start; }
+            set { start = value; }
+        }
 
         /** 
          * Update method: 
@@ -62,7 +67,7 @@ namespace Snappy_Deluxe {
         public void Update(GameTime gameTime) { 
             
             // Change skins if applicable 
-            setCurrentSprite();
+            SetCurrentSprite();
 
             // Game start
             KeyboardState keyboardState = Keyboard.GetState();
@@ -87,7 +92,7 @@ namespace Snappy_Deluxe {
          * Draw Method: 
          *
          * Draws Player Character when 
-         * called 
+         * called.
          *
          */
         public void Draw(SpriteBatch spriteBatch){ 
@@ -123,27 +128,27 @@ namespace Snappy_Deluxe {
             KeyboardState keyboardState = Keyboard.GetState(); 
             
             // Change skins
-            if (start) {
-                if (keyboardState.IsKeyDown(Keys.Up) && keyboardState.IsKeyUp(Keys.Up)) {
+            if (!start) {
+                if (keyboardState.IsKeyDown(Keys.Up) && keyboardStateOld.IsKeyUp(Keys.Up)) {
                     if (currentIndex >= size - 1) {
-                        currentSprite = sprites[0];
+                        currentSprite = sprites.ElementAt(0);
                         keyboardStateOld = keyboardState;
                         return;
                     }
                     else {
-                        currentSprite = sprites[currentIndex + 1]; 
+                        currentSprite = sprites.ElementAt(currentIndex + 1); 
                         keyboardStateOld = keyboardState;
                         return;
                     }
                 } 
-                else if (keyboardState.IsKeyDown(Keys.Down) && keyboardState.IsKeyUp(Keys.Down)) {
+                else if (keyboardState.IsKeyDown(Keys.Down) && keyboardStateOld.IsKeyUp(Keys.Down)) {
                     if (currentIndex <= 0) {
-                        currentSprite = sprites[size - 1];
+                        currentSprite = sprites.ElementAt(size - 1);
                         keyboardStateOld = keyboardState;
                         return;
                     }
                     else {
-                        currentSprite = sprites[currentIndex - 1]; 
+                        currentSprite = sprites.ElementAt(currentIndex - 1); 
                         keyboardStateOld = keyboardState;
                         return;
                     }

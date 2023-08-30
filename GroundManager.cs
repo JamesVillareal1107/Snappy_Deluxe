@@ -46,8 +46,7 @@ namespace Snappy_Deluxe {
 		 * @return: N/A
 		 */
 		public void Update(GameTime gameTime, GraphicsDeviceManager graphics) {
-			// TODO: Implement update behavior  
-			
+			  
 			// If at the start of the game, spawn initial ground objects
 			if (gameStart) {
 				StartupInstantiation(graphics);

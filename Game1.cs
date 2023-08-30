@@ -20,6 +20,9 @@ namespace Snappy_Deluxe {
         // Sprites & SpriteFonts
         private Texture2D backgroundSprite;
         private Texture2D chickenSprite;
+        private Texture2D henSprite;
+        private Texture2D penguinSprite;
+        private Texture2D pigeonSprite;
         private Texture2D pipeDownSprite;
         private Texture2D pipeUpSprite;
         private Texture2D groundSprite;
@@ -29,6 +32,7 @@ namespace Snappy_Deluxe {
         private Player player; 
         private Random spawnOffset; 
         private List<Pipe> pipesList;
+        private List<Texture2D> sprites;
         private GameManager gameState;
         private GroundManager grounds;
 
@@ -56,14 +60,24 @@ namespace Snappy_Deluxe {
 
             // TODO: use this.Content to load your game content here 
             backgroundSprite = Content.Load<Texture2D>("Sprites/Background");
-            playerSprite = Content.Load<Texture2D>("Sprites/Birds/Chicken/PNG/Chicken 1");
+            chickenSprite = Content.Load<Texture2D>("Sprites/Birds/Chicken/PNG/Chicken 1");
+            henSprite = Content.Load<Texture2D>("Sprites/Birds/Hen/PNG/Hen 1");
+            penguinSprite = Content.Load<Texture2D>("Sprites/Birds/Penguin/PNG/Penguin 1");
+            pigeonSprite = Content.Load<Texture2D>("Sprites/Birds/Pigeon/PNG/Pigeon 1");
             pipeDownSprite = Content.Load<Texture2D>("Sprites/Obstacle Pipe/Pipe Down");
             pipeUpSprite = Content.Load<Texture2D>("Sprites/Obstacle Pipe/Pipe Up"); 
             scoreSpriteFont = Content.Load<SpriteFont>("Sprites/UI/Score Font");
-            groundSprite = Content.Load<Texture2D>("Sprites/Platform/Platform");
+            groundSprite = Content.Load<Texture2D>("Sprites/Platform/Platform"); 
+            
+            // Add all skins to the game 
+            sprites = new List<Texture2D>();
+            sprites.Add(chickenSprite);
+            sprites.Add(henSprite);
+            sprites.Add(penguinSprite);
+            sprites.Add(pigeonSprite);
 
             // Initialize game objects 
-            player = new Player(_graphics, playerSprite);
+            player = new Player(_graphics, sprites);
             spawnOffset = new Random();
             pipesList = new List<Pipe>();
             gameState = new GameManager();

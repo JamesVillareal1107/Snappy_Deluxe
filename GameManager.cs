@@ -15,7 +15,7 @@ namespace Snappy_Deluxe {
         private const int DefaultHeight = 720;
         private const double DefaultTime = 1.5;
         private const int DefaultScore = 0;
-        private const int MaxSpawnOffset = 160;
+        private const int MaxSpawnOffset = 150;
         private const int ScoreYPosition = 5;
         private const int FontRadius = 45;
         private const int TitleRadius = 293;
@@ -77,7 +77,11 @@ namespace Snappy_Deluxe {
          *
          */
         public void Update(GameTime gameTime, GraphicsDeviceManager graphics, Player player, Random spawnOffset,
-                List<Pipe> pipesList, Texture2D topPipeSprite, Texture2D bottomPipeSprite) {
+                List<Pipe> pipesList, Texture2D topPipeSprite, Texture2D bottomPipeSprite) { 
+            
+            // Update player
+            player.Update(gameTime);
+
 
             // Game Start logic 
             KeyboardState keyboardState = Keyboard.GetState();
@@ -94,9 +98,7 @@ namespace Snappy_Deluxe {
                     startOfGame = false;
                     PipeSpawner.SpawnPipes(topPipeSprite, bottomPipeSprite, pipesList);
                 }
-
-                // Update player
-                player.Update(gameTime);
+                
 
                 // Spawn Pipes
                 spawnTimer -= gameTime.ElapsedGameTime.TotalSeconds;
@@ -119,6 +121,7 @@ namespace Snappy_Deluxe {
                         foreach (Pipe remainingPipe in pipesList) {
                             remainingPipe.Deleted = true;
                         }
+                        player.Start = false;
                     }
                 }
 
@@ -193,7 +196,7 @@ namespace Snappy_Deluxe {
             }
         }
 
-        /** TODO: Update collision Logic
+        /** 
          * CollisionDetected:
          * 
          * Detects a collision between the player object and the 
