@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
 
-// TODO: implement sprite list
 namespace Snappy_Deluxe {
 
     public class Game1 : Game {
@@ -101,7 +100,7 @@ namespace Snappy_Deluxe {
             // TODO: Add your drawing code here 
             _spriteBatch.Begin(); 
             gameState.Draw(_graphics,_spriteBatch, backgroundSprite, player, spawnOffset, pipesList, scoreSpriteFont); 
-            grounds.Draw(_spriteBatch); 
+            grounds.Draw(_spriteBatch, scoreSpriteFont); 
             _spriteBatch.End();
 
             base.Draw(gameTime);

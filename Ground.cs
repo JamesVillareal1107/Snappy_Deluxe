@@ -43,11 +43,21 @@ namespace Snappy_Deluxe {
             set { position = value; }
         }
 
-        // Methods 
+        // Methods  
+
+        /** 
+         * Update Method: 
+         * 
+         * Runs Update behavior 
+         * 
+         * @param: gameTime <GameTime> 
+         * @return: N/A 
+         */
         public void Update(GameTime gameTime) {
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds; 
             position.X -= speed * deltaTime;
         } 
+
         
         /**
          * Draw Method:

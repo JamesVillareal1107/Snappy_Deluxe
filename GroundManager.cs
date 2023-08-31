@@ -75,11 +75,11 @@ namespace Snappy_Deluxe {
 		 * @param: spriteBatch <SpriteBatch>
 		 * @return: N/A
 		 */
-		public void Draw(SpriteBatch spriteBatch) {
+		public void Draw(SpriteBatch spriteBatch, SpriteFont font) {
 			foreach (Ground curr in groundList) {
 				curr.Draw(spriteBatch);
 				curr.Draw(spriteBatch);
-			}
+			} 
 		}
 		
 		/**

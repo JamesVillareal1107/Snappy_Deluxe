@@ -4,8 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic; 
 using System;
-using Microsoft.Xna.Framework.Media;
-using System.Runtime.InteropServices;
 
 namespace Snappy_Deluxe {
     internal class GameManager {
@@ -15,7 +13,7 @@ namespace Snappy_Deluxe {
         private const int DefaultHeight = 720;
         private const double DefaultTime = 1.5;
         private const int DefaultScore = 0;
-        private const int MaxSpawnOffset = 150;
+        private const int MaxSpawnOffset = 115;
         private const int ScoreYPosition = 5;
         private const int FontRadius = 45;
         private const int TitleRadius = 293;
@@ -79,9 +77,9 @@ namespace Snappy_Deluxe {
         public void Update(GameTime gameTime, GraphicsDeviceManager graphics, Player player, Random spawnOffset,
                 List<Pipe> pipesList, Texture2D topPipeSprite, Texture2D bottomPipeSprite) { 
             
-            // Update player
+            // Update player and cast score to int at all times
             player.Update(gameTime);
-
+            score = (int)score;
 
             // Game Start logic 
             KeyboardState keyboardState = Keyboard.GetState();
@@ -90,7 +88,7 @@ namespace Snappy_Deluxe {
                 startOfGame = true;
             }
 
-            //TODO: Condition if we are in the main game loop 
+            // Main game loop
             if (inGameLoop) {
 
                 // Start/setup main game loop 
@@ -125,10 +123,10 @@ namespace Snappy_Deluxe {
                     }
                 }
 
-            }
+            } 
+            
             // Delete all pipes
             pipesList.RemoveAll(p => p.Deleted);
-
         }
 
         /**
@@ -173,7 +171,7 @@ namespace Snappy_Deluxe {
          *
          */
         public bool ScoreCheck(Player player, Pipe pipe) {
-            if (player.Position.X == pipe.Position.X) {
+            if ((int)player.Position.X == (int)pipe.Position.X) {
                 score += ScoreValue;
                 if (score > highScore) {
                     highScore = score;
@@ -200,7 +198,11 @@ namespace Snappy_Deluxe {
          * CollisionDetected:
          * 
          * Detects a collision between the player object and the 
-         * pipe object 
+         * pipe object  
+         * 
+         * @Param: graphics <GraphicsDeviceManager>
+         * @Param: player <Player> 
+         * @Param: pipe <Pipe>
          *
          */
         public bool CollisionDetected(GraphicsDeviceManager graphics, Player player, Pipe pipe) {
@@ -209,7 +211,6 @@ namespace Snappy_Deluxe {
             if (player.Position.Y >= graphics.PreferredBackBufferHeight - GroundCollision) {
                 return true;
             }
-
 
             // check if the player is in the same x area as the pipe
             bool inXArea = false;
