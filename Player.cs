@@ -105,13 +105,12 @@ namespace Snappy_Deluxe {
         private void Jump(GameTime gameTime, KeyboardState keyboardState) {
             if (start) {
                 float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-                float verticalTrajectory = (speed * deltaTime) - (velocity * deltaTime);
-                position.Y += verticalTrajectory;
+                float verticalTrajectory = speed - velocity;
+                position.Y += verticalTrajectory * deltaTime;
                 if (keyboardState.IsKeyDown(Keys.Space) && keyboardStateOld.IsKeyUp(Keys.Space) && position.Y > 0) {
                     velocity = MaxVelocity;
                     Sounds.jumpSound.Play();
                 }
-
                 velocity -= VelocityChange;
             }
             keyboardStateOld = keyboardState;
