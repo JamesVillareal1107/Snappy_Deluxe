@@ -70,25 +70,53 @@ namespace Snappy_Deluxe {
             SetCurrentSprite();
 
             // Game start
-            KeyboardState keyboardState = Keyboard.GetState();
-            if (keyboardState.IsKeyDown(Keys.Space)) {
-                start = true;
-            }
+            var keyboardState = StartMovement();
 
             // Vertical movement
-            if (start) { 
-                float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds; 
-                float verticalTrajectory = (speed * deltaTime) - (velocity * deltaTime);
-                position.Y += verticalTrajectory; 
-                if(keyboardState.IsKeyDown(Keys.Space) && keyboardStateOld.IsKeyUp(Keys.Space) && position.Y > 0) {
-                    velocity = MaxVelocity;
-                    Sounds.jumpSound.Play(1.0f,1.0f,0.0f);
-                }
-                velocity -= VelocityChange;
-            }  
-            keyboardStateOld = keyboardState; 
-        }  
+            Jump(gameTime, keyboardState);
+        }
         
+        /**
+         * StartMovement method:
+         *
+         * Starts initial player movement
+         * when called
+         *
+         * @param: N/A
+         * @return: Keyboardstate
+         */
+        private KeyboardState StartMovement() {
+            KeyboardState keyboardState = Keyboard.GetState();
+            if (keyboardState.IsKeyDown(Keys.Space) && keyboardStateOld.IsKeyUp(Keys.Space)) {
+                start = true;
+            }
+            return keyboardState;
+        }
+
+        /**
+         * Jump Method:
+         *
+         * Makes player character jump
+         * when called
+         *
+         * @param: gameTime <GameTime>
+         * @param: keyboardState <KeyboardState>
+         */
+        private void Jump(GameTime gameTime, KeyboardState keyboardState) {
+            if (start) {
+                float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                float verticalTrajectory = (speed * deltaTime) - (velocity * deltaTime);
+                position.Y += verticalTrajectory;
+                if (keyboardState.IsKeyDown(Keys.Space) && keyboardStateOld.IsKeyUp(Keys.Space) && position.Y > 0) {
+                    velocity = MaxVelocity;
+                    Sounds.jumpSound.Play();
+                }
+
+                velocity -= VelocityChange;
+            }
+            keyboardStateOld = keyboardState;
+        }
+
         /** 
          * Draw Method: 
          *

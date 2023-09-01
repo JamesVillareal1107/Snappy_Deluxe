@@ -88,7 +88,7 @@ namespace Snappy_Deluxe {
 
             // Game Start logic 
             KeyboardState keyboardState = Keyboard.GetState();
-            if (keyboardState.IsKeyDown(Keys.Space) && !inGameLoop) {
+            if (keyboardState.IsKeyDown(Keys.Space) && !inGameLoop && player.Start) {
                 inGameLoop = true;
                 startOfGame = true;
             }
