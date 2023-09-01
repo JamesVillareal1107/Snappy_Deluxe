@@ -13,6 +13,30 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Sounds/BirdFlap.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/BirdFlap.wav
+
+#begin Sounds/RetroExplosion7.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/RetroExplosion7.wav
+
+#begin Sounds/SnappyScore.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/SnappyScore.mp3
+
+#begin Sounds/SnappyUltimateBackgroundMusic.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/SnappyUltimateBackgroundMusic.mp3
+
 #begin Sprites/Background.png
 /importer:TextureImporter
 /processor:TextureProcessor

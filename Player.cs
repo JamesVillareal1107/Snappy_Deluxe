@@ -81,7 +81,8 @@ namespace Snappy_Deluxe {
                 float verticalTrajectory = (speed * deltaTime) - (velocity * deltaTime);
                 position.Y += verticalTrajectory; 
                 if(keyboardState.IsKeyDown(Keys.Space) && keyboardStateOld.IsKeyUp(Keys.Space) && position.Y > 0) {
-                    velocity = MaxVelocity; 
+                    velocity = MaxVelocity;
+                    Sounds.jumpSound.Play(1.0f,1.0f,0.0f);
                 }
                 velocity -= VelocityChange;
             }  

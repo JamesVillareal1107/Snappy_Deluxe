@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic; 
 using System;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Snappy_Deluxe {
     internal class GameManager {
@@ -23,6 +25,9 @@ namespace Snappy_Deluxe {
         private const double ScoreValue = 0.5;
         private const int CollisionOffset = 20;
         private const int GroundCollision = 96;
+        private const float DefaultDeathVolume = 0.5f;
+        private const float DefaultDeathPitch = 1f;
+        private const float DefaultDeathPan = 0f;
 
         // Instance Variables
         private bool inGameLoop;
@@ -120,6 +125,7 @@ namespace Snappy_Deluxe {
                             remainingPipe.Deleted = true;
                         }
                         player.Start = false;
+                        Sounds.deathSound.Play(DefaultDeathVolume, DefaultDeathPitch, DefaultDeathPan);
                     }
                 }
 
@@ -173,6 +179,7 @@ namespace Snappy_Deluxe {
         public bool ScoreCheck(Player player, Pipe pipe) {
             if ((int)player.Position.X == (int)pipe.Position.X) {
                 score += ScoreValue;
+                Sounds.scoreSound.Play();
                 if (score > highScore) {
                     highScore = score;
                 }
@@ -219,7 +226,7 @@ namespace Snappy_Deluxe {
             int playerLeftCheck = (int)(player.Position.X + player.Radius) - CollisionOffset;
             int playerRightCheck = (int)(player.Position.X - player.Radius) + CollisionOffset;
             if (playerLeftCheck > pipeLeftMaximum && playerRightCheck < pipeRightMaximum) {
-                inXArea = true;
+                inXArea = true; 
             }
 
             // Determine if pipe is above or below the player 

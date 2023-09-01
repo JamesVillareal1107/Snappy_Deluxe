@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input; 
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 using System.Collections.Generic;
 using System;
 
@@ -11,6 +13,7 @@ namespace Snappy_Deluxe {
         // Constants 
         private const int DefaultWidth = 1280;
         private const int DefaultHeight = 720;
+        private const float SongVolume = 0.1f;
 
         // graphics devices
         private GraphicsDeviceManager _graphics;
@@ -80,7 +83,17 @@ namespace Snappy_Deluxe {
             spawnOffset = new Random();
             pipesList = new List<Pipe>();
             gameState = new GameManager();
-            grounds = new GroundManager(groundSprite);
+            grounds = new GroundManager(groundSprite); 
+            
+            // Add sounds/music into the game
+            Sounds.jumpSound = Content.Load<SoundEffect>("Sounds/BirdFlap");
+            Sounds.deathSound = Content.Load<SoundEffect>("Sounds/RetroExplosion7");
+            Sounds.scoreSound = Content.Load<SoundEffect>("Sounds/SnappyScore");
+            Sounds.backgroundMusic = Content.Load<Song>("Sounds/SnappyUltimateBackgroundMusic");
+
+            // Play the background music on startup and for the whole game  
+            MediaPlayer.Volume = SongVolume;
+            MediaPlayer.Play(Sounds.backgroundMusic);
         }
 
         protected override void Update(GameTime gameTime) {
