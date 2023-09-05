@@ -27,6 +27,7 @@ namespace Snappy_Deluxe {
         private KeyboardState keyboardStateOld;
         private List<Texture2D> sprites;
         private Texture2D currentSprite;
+        private float rotation;
 
         // Constructor
         public Player(GraphicsDeviceManager graphics, List<Texture2D> sprites) {
@@ -70,10 +71,10 @@ namespace Snappy_Deluxe {
             SetCurrentSprite();
 
             // Game start
-            var keyboardState = StartMovement();
+            var keyboardState = SetStartMovement();
 
             // Vertical movement
-            Jump(gameTime, keyboardState);
+            VerticalMovement(gameTime, keyboardState);
         }
         
         /**
@@ -85,7 +86,7 @@ namespace Snappy_Deluxe {
          * @param: N/A
          * @return: Keyboardstate
          */
-        private KeyboardState StartMovement() {
+        private KeyboardState SetStartMovement() {
             KeyboardState keyboardState = Keyboard.GetState();
             if (keyboardState.IsKeyDown(Keys.Space) && keyboardStateOld.IsKeyUp(Keys.Space)) {
                 start = true;
@@ -102,7 +103,7 @@ namespace Snappy_Deluxe {
          * @param: gameTime <GameTime>
          * @param: keyboardState <KeyboardState>
          */
-        private void Jump(GameTime gameTime, KeyboardState keyboardState) {
+        private void VerticalMovement(GameTime gameTime, KeyboardState keyboardState) {
             if (start) {
                 float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 float verticalTrajectory = speed - velocity;
@@ -183,6 +184,20 @@ namespace Snappy_Deluxe {
                         
                 }
             }
+        }
+        
+        /**
+         * Rotate method:
+         *
+         * Changes the rotation value based on
+         * the velocity of the player object
+         * when in game
+         *
+         * @param: N/A
+         * @return: N/A
+         */
+        public void Rotate() {
+            
         }
           
         
