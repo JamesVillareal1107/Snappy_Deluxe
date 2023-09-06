@@ -23,7 +23,7 @@ namespace Snappy_Deluxe {
         private const int HighScoreRadius = 288;
         private const int HighScoreYPositionOffset = 150;
         private const double ScoreValue = 0.5;
-        private const int CollisionOffset = 20;
+        private const int CollisionOffset = 10;
         private const int GroundCollision = 96;
         private const float DefaultDeathVolume = 0.5f;
         private const float DefaultDeathPitch = 1f;

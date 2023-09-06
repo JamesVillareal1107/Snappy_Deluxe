@@ -17,8 +17,9 @@ namespace Snappy_Deluxe {
         private const int MaxVelocity = 1000;
         private const int VelocityChange = 35;
         private const int PlayerScale = 80;
-        private const float UpwardsRotation = 0.075f;
-        private const float DownwardsRotation = 0.1125f;
+        private const float UpwardsRotation = 0.013f;
+        private const float DownwardsRotation = 0.02f;
+        private const float RotationOffset = 0.5f;
 
         // Instance variables
         private int radius;
@@ -130,7 +131,7 @@ namespace Snappy_Deluxe {
          */
         public void Draw(SpriteBatch spriteBatch){ 
             Rectangle playerPosition = new Rectangle((int)position.X,(int)position.Y,PlayerScale,PlayerScale);
-            spriteBatch.Draw(currentSprite,playerPosition, null, Color.White, rotation, position, SpriteEffects.None, -0.1f); // TODO: fix
+            spriteBatch.Draw(currentSprite,playerPosition, null , Color.White, MathHelper.ToRadians(rotation), new Vector2(RotationOffset,RotationOffset), SpriteEffects.None, 0); // TODO: fix
         } 
 
         /**
@@ -203,10 +204,10 @@ namespace Snappy_Deluxe {
         public void Rotate() {
             float verticalTrajectory = gravity - velocity;
             if (verticalTrajectory < 0 && start) {
-                rotation = -(verticalTrajectory * UpwardsRotation);
+                rotation = verticalTrajectory * UpwardsRotation;
             } 
             else if (verticalTrajectory > 0 && start) {
-                rotation = -(verticalTrajectory * DownwardsRotation);
+                rotation = verticalTrajectory * DownwardsRotation;
             }
             else {
                 rotation = 0;
