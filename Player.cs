@@ -12,16 +12,18 @@ namespace Snappy_Deluxe {
 
         // Constants 
         private const int DefaultRadius = 40;
-        private const int DefaultSpeed = 400;
+        private const int DefaultGravity = 400;
         private const int DefaultVelocity = 0; 
         private const int MaxVelocity = 1000;
         private const int VelocityChange = 35;
         private const int PlayerScale = 80;
+        private const float UpwardsRotation = 0.075f;
+        private const float DownwardsRotation = 0.1125f;
 
         // Instance variables
         private int radius;
         private Vector2 position;
-        private int speed;
+        private int gravity;
         private int velocity;
         private bool start;
         private KeyboardState keyboardStateOld;
@@ -33,12 +35,13 @@ namespace Snappy_Deluxe {
         public Player(GraphicsDeviceManager graphics, List<Texture2D> sprites) {
             radius = DefaultRadius;
             position = new Vector2((graphics.PreferredBackBufferWidth/2) - radius, graphics.PreferredBackBufferHeight/2 - radius);
-            speed = DefaultSpeed;
+            gravity = DefaultGravity;
             velocity = DefaultVelocity;
             start = false;  
             keyboardStateOld = Keyboard.GetState();
             this.sprites = sprites;
             currentSprite = sprites[0];
+            rotation = 0;
         }
 
         // Properties/Getters
@@ -71,10 +74,11 @@ namespace Snappy_Deluxe {
             SetCurrentSprite();
 
             // Game start
-            var keyboardState = SetStartMovement();
+            var startState = SetStartMovement();
 
-            // Vertical movement
-            VerticalMovement(gameTime, keyboardState);
+            // movement logic
+            VerticalMovement(gameTime, startState); 
+            Rotate();
         }
         
         /**
@@ -106,7 +110,7 @@ namespace Snappy_Deluxe {
         private void VerticalMovement(GameTime gameTime, KeyboardState keyboardState) {
             if (start) {
                 float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-                float verticalTrajectory = speed - velocity;
+                float verticalTrajectory = gravity - velocity;
                 position.Y += verticalTrajectory * deltaTime;
                 if (keyboardState.IsKeyDown(Keys.Space) && keyboardStateOld.IsKeyUp(Keys.Space) && position.Y > 0) {
                     velocity = MaxVelocity;
@@ -126,7 +130,7 @@ namespace Snappy_Deluxe {
          */
         public void Draw(SpriteBatch spriteBatch){ 
             Rectangle playerPosition = new Rectangle((int)position.X,(int)position.Y,PlayerScale,PlayerScale);
-            spriteBatch.Draw(currentSprite,playerPosition,Color.White);
+            spriteBatch.Draw(currentSprite,playerPosition, null, Color.White, rotation, position, SpriteEffects.None, -0.1f); // TODO: fix
         } 
 
         /**
@@ -190,17 +194,27 @@ namespace Snappy_Deluxe {
          * Rotate method:
          *
          * Changes the rotation value based on
-         * the velocity of the player object
+         * the velocity/trajectory of the player object
          * when in game
          *
          * @param: N/A
          * @return: N/A
          */
         public void Rotate() {
-            
+            float verticalTrajectory = gravity - velocity;
+            if (verticalTrajectory < 0 && start) {
+                rotation = -(verticalTrajectory * UpwardsRotation);
+            } 
+            else if (verticalTrajectory > 0 && start) {
+                rotation = -(verticalTrajectory * DownwardsRotation);
+            }
+            else {
+                rotation = 0;
+            }
         }
           
         
-    } 
+    }  
+    
 
 }

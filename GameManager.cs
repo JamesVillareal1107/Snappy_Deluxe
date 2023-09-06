@@ -153,7 +153,7 @@ namespace Snappy_Deluxe {
             Vector2 highScorePosition = new Vector2((graphics.PreferredBackBufferWidth / 2) - HighScoreRadius, (graphics.PreferredBackBufferHeight / 2) + HighScoreYPositionOffset);
 
             // Always draw background and player
-            spriteBatch.Draw(backgroundSprite, backgroundPosition, Color.White);
+            spriteBatch.Draw(backgroundSprite, backgroundPosition, null, Color.White);
             player.Draw(spriteBatch);
 
             // Draw Based on game condition 

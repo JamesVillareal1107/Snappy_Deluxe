@@ -86,7 +86,7 @@ namespace Snappy_Deluxe {
          */
         public void Draw(SpriteBatch spriteBatch) { 
             Rectangle drawPosition = new Rectangle((int)position.X-halfWidth, (int)position.Y-halfHeight, width, height);
-            spriteBatch.Draw(sprite, drawPosition, Color.White);
+            spriteBatch.Draw(sprite, drawPosition, null, Color.White);
         } 
 
     }
