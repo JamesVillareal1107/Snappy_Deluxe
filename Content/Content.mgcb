@@ -637,6 +637,13 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/UI/Frame.png
 
+#begin Sprites/UI/MessageFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Sprites/UI/MessageFont.spritefont
+
 #begin Sprites/UI/New Best Score Tag.png
 /importer:TextureImporter
 /processor:TextureProcessor

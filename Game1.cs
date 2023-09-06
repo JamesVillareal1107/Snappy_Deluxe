@@ -29,6 +29,7 @@ namespace Snappy_Deluxe {
         private Texture2D pipeUpSprite;
         private Texture2D groundSprite;
         private SpriteFont scoreSpriteFont;
+        private SpriteFont messageSpriteFont;
 
         // Game Objects
         private Player player; 
@@ -67,9 +68,10 @@ namespace Snappy_Deluxe {
             penguinSprite = Content.Load<Texture2D>("Sprites/Birds/Penguin/PNG/Penguin 1");
             pigeonSprite = Content.Load<Texture2D>("Sprites/Birds/Pigeon/PNG/Pigeon 1");
             pipeDownSprite = Content.Load<Texture2D>("Sprites/Obstacle Pipe/Pipe Down");
-            pipeUpSprite = Content.Load<Texture2D>("Sprites/Obstacle Pipe/Pipe Up"); 
-            scoreSpriteFont = Content.Load<SpriteFont>("Sprites/UI/Score Font");
+            pipeUpSprite = Content.Load<Texture2D>("Sprites/Obstacle Pipe/Pipe Up");  
             groundSprite = Content.Load<Texture2D>("Sprites/Platform/Platform"); 
+            scoreSpriteFont = Content.Load<SpriteFont>("Sprites/UI/Score Font");
+            messageSpriteFont = Content.Load<SpriteFont>("Sprites/UI/MessageFont");
             
             // Add all skins to the game 
             sprites = new List<Texture2D>();
@@ -112,7 +114,7 @@ namespace Snappy_Deluxe {
 
             // TODO: Add your drawing code here 
             _spriteBatch.Begin(); 
-            gameState.Draw(_graphics,_spriteBatch, backgroundSprite, player, spawnOffset, pipesList, scoreSpriteFont); 
+            gameState.Draw(_graphics,_spriteBatch, backgroundSprite, player, spawnOffset, pipesList, scoreSpriteFont, messageSpriteFont); 
             grounds.Draw(_spriteBatch, scoreSpriteFont); 
             _spriteBatch.End();
 

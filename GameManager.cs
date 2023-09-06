@@ -144,13 +144,15 @@ namespace Snappy_Deluxe {
          *
          */
         public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D backgroundSprite, Player player, Random spawnOffset,
-                List<Pipe> pipesList, SpriteFont spriteFont) {
+                List<Pipe> pipesList, SpriteFont spriteFont, SpriteFont messageSpriteFont) {
 
             // Drawing variables 
             Rectangle backgroundPosition = new Rectangle(0, 0, DefaultWidth, DefaultHeight);
             Vector2 scorePosition = new Vector2((graphics.PreferredBackBufferWidth / 2) - FontRadius, ScoreYPosition);
             Vector2 titlePosition = new Vector2((graphics.PreferredBackBufferWidth / 2) - TitleRadius, ScoreYPosition);
             Vector2 highScorePosition = new Vector2((graphics.PreferredBackBufferWidth / 2) - HighScoreRadius, (graphics.PreferredBackBufferHeight / 2) + HighScoreYPositionOffset);
+            Vector2 skinMessagePosition = new Vector2(player.Position.X - 500,player.Position.Y);
+            Vector2 startMessagePosition = new Vector2(player.Position.X + 300,player.Position.Y);
 
             // Always draw background and player
             spriteBatch.Draw(backgroundSprite, backgroundPosition, null, Color.White);
@@ -166,6 +168,10 @@ namespace Snappy_Deluxe {
             else {
                 spriteBatch.DrawString(spriteFont, "Snappy Deluxe", titlePosition, Color.White);
                 spriteBatch.DrawString(spriteFont, "High Score: " + highScore.ToString(), highScorePosition, Color.White);
+                
+                // TODO: fix message 
+                spriteBatch.DrawString(messageSpriteFont, "Use up and down \nkeys to change skins", skinMessagePosition , Color.White);
+                spriteBatch.DrawString(messageSpriteFont, "Press space to start", startMessagePosition , Color.White);
             }
         }
 

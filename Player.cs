@@ -131,7 +131,7 @@ namespace Snappy_Deluxe {
          */
         public void Draw(SpriteBatch spriteBatch){ 
             Rectangle playerPosition = new Rectangle((int)position.X,(int)position.Y,PlayerScale,PlayerScale);
-            spriteBatch.Draw(currentSprite,playerPosition, null , Color.White, MathHelper.ToRadians(rotation), new Vector2(RotationOffset,RotationOffset), SpriteEffects.None, 0); // TODO: fix
+            spriteBatch.Draw(currentSprite,playerPosition, null , Color.White, MathHelper.ToRadians(rotation), new Vector2(RotationOffset,RotationOffset), SpriteEffects.None, 0); 
         } 
 
         /**
