@@ -17,8 +17,8 @@ namespace Snappy_Deluxe {
         private const int MaxVelocity = 1000;
         private const int VelocityChange = 35;
         private const int PlayerScale = 80;
-        private const float UpwardsRotation = 0.013f;
-        private const float DownwardsRotation = 0.02f;
+        private const float UpwardsRotation = 1.2f;
+        private const float DownwardsRotation = 1f;
         private const float RotationOffset = 0.5f;
 
         // Instance variables
@@ -79,7 +79,7 @@ namespace Snappy_Deluxe {
 
             // movement logic
             VerticalMovement(gameTime, startState); 
-            Rotate();
+            Rotate(gameTime);
         }
         
         /**
@@ -201,13 +201,14 @@ namespace Snappy_Deluxe {
          * @param: N/A
          * @return: N/A
          */
-        public void Rotate() {
+        public void Rotate(GameTime gameTime) {
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             float verticalTrajectory = gravity - velocity;
             if (verticalTrajectory < 0 && start) {
-                rotation = verticalTrajectory * UpwardsRotation;
+                rotation = verticalTrajectory * UpwardsRotation * deltaTime;
             } 
             else if (verticalTrajectory > 0 && start) {
-                rotation = verticalTrajectory * DownwardsRotation;
+                rotation = verticalTrajectory * DownwardsRotation * deltaTime;
             }
             else {
                 rotation = 0;

@@ -13,7 +13,7 @@ namespace Snappy_Deluxe {
         // Constants 
         private const int DefaultWidth = 1280;
         private const int DefaultHeight = 720;
-        private const double DefaultTime = 1.5;
+        private const double DefaultTime = 1.3;
         private const int DefaultScore = 0;
         private const int MaxSpawnOffset = 115;
         private const int ScoreYPosition = 5;
@@ -23,7 +23,7 @@ namespace Snappy_Deluxe {
         private const int HighScoreRadius = 288;
         private const int HighScoreYPositionOffset = 150;
         private const double ScoreValue = 0.5;
-        private const int CollisionOffset = 10;
+        private const int CollisionOffset = 1;
         private const int GroundCollision = 96;
         private const float DefaultDeathVolume = 0.5f;
         private const float DefaultDeathPitch = 1f;
@@ -168,8 +168,6 @@ namespace Snappy_Deluxe {
             else {
                 spriteBatch.DrawString(spriteFont, "Snappy Deluxe", titlePosition, Color.White);
                 spriteBatch.DrawString(spriteFont, "High Score: " + highScore.ToString(), highScorePosition, Color.White);
-                
-                // TODO: fix message 
                 spriteBatch.DrawString(messageSpriteFont, "Use up and down \nkeys to change skins", skinMessagePosition , Color.White);
                 spriteBatch.DrawString(messageSpriteFont, "Press space to start", startMessagePosition , Color.White);
             }
