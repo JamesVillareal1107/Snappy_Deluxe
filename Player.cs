@@ -19,7 +19,9 @@ namespace Snappy_Deluxe {
         private const int PlayerScale = 80;
         private const float UpwardsRotation = 1.2f;
         private const float DownwardsRotation = 1f;
-        private const float RotationOffset = 0.5f;
+        private const float RotationOffset = 0.5f; 
+        private const int DeathRotation = 1600; 
+        
 
         // Instance variables
         private int radius;
@@ -69,17 +71,17 @@ namespace Snappy_Deluxe {
          * 
          * @param gameTime 
          */
-        public void Update(GameTime gameTime) { 
+        public void Update(GameTime gameTime, GameManager manager) { 
             
             // Change skins if applicable 
             SetCurrentSprite();
 
             // Game start
-            var startState = SetStartMovement();
+            var startState = SetStartMovement(manager);
 
-            // movement logic
-            VerticalMovement(gameTime, startState); 
-            Rotate(gameTime);
+            // movement logic 
+            Movement(gameTime, startState, manager);
+            Rotate(gameTime, manager);
         }
         
         /**
@@ -91,26 +93,26 @@ namespace Snappy_Deluxe {
          * @param: N/A
          * @return: Keyboardstate
          */
-        private KeyboardState SetStartMovement() {
+        private KeyboardState SetStartMovement(GameManager manager) {
             KeyboardState keyboardState = Keyboard.GetState();
-            if (keyboardState.IsKeyDown(Keys.Space) && keyboardStateOld.IsKeyUp(Keys.Space)) {
+            if (keyboardState.IsKeyDown(Keys.Space) && keyboardStateOld.IsKeyUp(Keys.Space) && !manager.Collided) {
                 start = true;
             }
             return keyboardState;
         }
 
         /**
-         * Jump Method:
+         * Movement Method:
          *
-         * Makes player character jump
+         * implements movement logic
          * when called
          *
          * @param: gameTime <GameTime>
          * @param: keyboardState <KeyboardState>
          */
-        private void VerticalMovement(GameTime gameTime, KeyboardState keyboardState) {
-            if (start) {
-                float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        private void Movement(GameTime gameTime, KeyboardState keyboardState, GameManager manager) { 
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (start && !manager.Collided) {
                 float verticalTrajectory = gravity - velocity;
                 position.Y += verticalTrajectory * deltaTime;
                 if (keyboardState.IsKeyDown(Keys.Space) && keyboardStateOld.IsKeyUp(Keys.Space) && position.Y > 0) {
@@ -118,8 +120,24 @@ namespace Snappy_Deluxe {
                     Sounds.jumpSound.Play();
                 }
                 velocity -= VelocityChange;
+            } 
+            else if(manager.InGameLoop) {
+                DeathAnimation(deltaTime);
             }
             keyboardStateOld = keyboardState;
+        }
+        
+        /**
+         * DeathAnimation Method:
+         *
+         * movement for player death
+         *
+         * @param: deltaTime <float>
+         * @return: N/A
+         */
+        private void DeathAnimation(float deltaTime) {
+            position.Y += gravity * deltaTime;
+            position.X -= velocity * deltaTime;
         }
 
         /** 
@@ -195,13 +213,13 @@ namespace Snappy_Deluxe {
          * Rotate method:
          *
          * Changes the rotation value based on
-         * the velocity/trajectory of the player object
+         * the velocity/trajectory and state of the player object
          * when in game
          *
          * @param: N/A
          * @return: N/A
          */
-        public void Rotate(GameTime gameTime) {
+        public void Rotate(GameTime gameTime, GameManager manager) {
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             float verticalTrajectory = gravity - velocity;
             if (verticalTrajectory < 0 && start) {
@@ -209,6 +227,9 @@ namespace Snappy_Deluxe {
             } 
             else if (verticalTrajectory > 0 && start) {
                 rotation = verticalTrajectory * DownwardsRotation * deltaTime;
+            } 
+            else if (!start && manager.InGameLoop) {
+                rotation += DeathRotation * deltaTime; 
             }
             else {
                 rotation = 0;

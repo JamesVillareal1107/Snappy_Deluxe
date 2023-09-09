@@ -45,7 +45,7 @@ namespace Snappy_Deluxe {
 		 * @param: graphics <GraphicsDeviceManager>
 		 * @return: N/A
 		 */
-		public void Update(GameTime gameTime, GraphicsDeviceManager graphics) {
+		public void Update(GameTime gameTime, GraphicsDeviceManager graphics, GameManager manager) {
 			  
 			// If at the start of the game, spawn initial ground objects
 			if (gameStart) {
@@ -53,11 +53,13 @@ namespace Snappy_Deluxe {
 				gameStart = false;
 			}
 			
-			// Update every ground object in the game
-			foreach (Ground curr in groundList) {
-				curr.Update(gameTime);
-			} 
-			
+			// Update every ground object in the game 
+			if (!manager.Collided) {
+				foreach (Ground curr in groundList) {
+					curr.Update(gameTime);
+				} 
+			}
+
 			// Spawn/Despawn loop
 			if (DespawnSingleGround(graphics)) {
 				SpawnSingleGround(graphics);

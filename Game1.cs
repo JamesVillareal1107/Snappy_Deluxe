@@ -91,6 +91,7 @@ namespace Snappy_Deluxe {
             Sounds.jumpSound = Content.Load<SoundEffect>("Sounds/BirdFlap");
             Sounds.deathSound = Content.Load<SoundEffect>("Sounds/RetroExplosion7");
             Sounds.scoreSound = Content.Load<SoundEffect>("Sounds/SnappyScore");
+            Sounds.birdDying = Content.Load<SoundEffect>("Sounds/BirdDying");
             Sounds.backgroundMusic = Content.Load<Song>("Sounds/SnappyUltimateBackgroundMusic");
 
             // Play the background music on startup and for the whole game  
@@ -104,7 +105,7 @@ namespace Snappy_Deluxe {
 
             // TODO: Add your update logic here 
             gameState.Update(gameTime, _graphics, player, spawnOffset, pipesList, pipeUpSprite, pipeDownSprite);
-            grounds.Update(gameTime, _graphics);
+            grounds.Update(gameTime, _graphics, gameState);
             
             base.Update(gameTime);
         }

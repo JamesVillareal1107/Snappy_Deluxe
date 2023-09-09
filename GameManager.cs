@@ -28,6 +28,7 @@ namespace Snappy_Deluxe {
         private const float DefaultDeathVolume = 0.5f;
         private const float DefaultDeathPitch = 1f;
         private const float DefaultDeathPan = 0f;
+        private const int GroundHeight = 96;
 
         // Instance Variables
         private bool inGameLoop;
@@ -35,6 +36,7 @@ namespace Snappy_Deluxe {
         private double spawnTimer;
         private double score;
         private double highScore;
+        private bool collided;
 
 
         // Constructors
@@ -44,12 +46,18 @@ namespace Snappy_Deluxe {
             spawnTimer = DefaultTime;
             score = DefaultScore;
             highScore = DefaultScore;
+            collided = false;
         }
 
         // Properties 
         public bool InGameLoop {
             get { return inGameLoop; }
             set { inGameLoop = value; }
+        } 
+        
+        public bool Collided {
+            get { return collided; }
+            set { collided = value; }
         }
 
         public bool StartOfGame {
@@ -82,8 +90,13 @@ namespace Snappy_Deluxe {
         public void Update(GameTime gameTime, GraphicsDeviceManager graphics, Player player, Random spawnOffset,
                 List<Pipe> pipesList, Texture2D topPipeSprite, Texture2D bottomPipeSprite) { 
             
-            // Update player and cast score to int at all times
-            player.Update(gameTime);
+            // if the game is not started, make sure collided is false 
+            if (!inGameLoop) {
+                collided = false;
+            }
+            
+            // Update player and cast score to int at all times 
+            player.Update(gameTime,this);
             score = (int)score;
 
             // Game Start logic 
@@ -103,20 +116,31 @@ namespace Snappy_Deluxe {
                 }
                 
 
-                // Spawn Pipes
-                spawnTimer -= gameTime.ElapsedGameTime.TotalSeconds;
-                if (spawnTimer <= 0) {
-                    int spawnPoint = spawnOffset.Next(-MaxSpawnOffset, MaxSpawnOffset);
-                    PipeSpawner.SpawnPipesRandom(topPipeSprite, bottomPipeSprite, pipesList, spawnPoint);
-                    spawnTimer = DefaultTime;
+                // Spawn Pipes 
+                if (!collided) {
+                    spawnTimer -= gameTime.ElapsedGameTime.TotalSeconds;
+                    if (spawnTimer <= 0) {
+                        int spawnPoint = spawnOffset.Next(-MaxSpawnOffset, MaxSpawnOffset);
+                        PipeSpawner.SpawnPipesRandom(topPipeSprite, bottomPipeSprite, pipesList, spawnPoint);
+                        spawnTimer = DefaultTime;
+                    }
                 }
 
                 // Update Pipes and increment score when applicable
                 foreach (Pipe pipe in pipesList) {
-                    pipe.Update(gameTime);
-                    ScoreCheck(player, pipe);
-                    DeletePipe(pipe, pipesList);
-                    if (CollisionDetected(graphics, player, pipe)) {
+                    if (CollisionDetected(graphics, player, pipe) && !collided) {
+                        collided = true;
+                        Sounds.birdDying.Play();
+                    }
+                    if (!collided) {
+                        pipe.Update(gameTime); 
+                        ScoreCheck(player, pipe);
+                        DeletePipe(pipe, pipesList);
+                    }
+                    if (collided) {
+                        player.Start = false;
+                    }
+                    if (IsPlayerOutOfBounds(player, graphics)) {
                         inGameLoop = false;
                         spawnTimer = DefaultTime;
                         score = DefaultScore;
@@ -126,6 +150,7 @@ namespace Snappy_Deluxe {
                         }
                         player.Start = false;
                         Sounds.deathSound.Play(DefaultDeathVolume, DefaultDeathPitch, DefaultDeathPan);
+                        collided = false;
                     }
                 }
 
@@ -144,20 +169,21 @@ namespace Snappy_Deluxe {
          *
          */
         public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D backgroundSprite, Player player, Random spawnOffset,
-                List<Pipe> pipesList, SpriteFont spriteFont, SpriteFont messageSpriteFont) {
-
+                List<Pipe> pipesList, SpriteFont spriteFont, SpriteFont messageSpriteFont)
+        {
             // Drawing variables 
-            Rectangle backgroundPosition = new Rectangle(0, 0, DefaultWidth, DefaultHeight);
-            Vector2 scorePosition = new Vector2((graphics.PreferredBackBufferWidth / 2) - FontRadius, ScoreYPosition);
-            Vector2 titlePosition = new Vector2((graphics.PreferredBackBufferWidth / 2) - TitleRadius, ScoreYPosition);
-            Vector2 highScorePosition = new Vector2((graphics.PreferredBackBufferWidth / 2) - HighScoreRadius, (graphics.PreferredBackBufferHeight / 2) + HighScoreYPositionOffset);
-            Vector2 skinMessagePosition = new Vector2(player.Position.X - 500,player.Position.Y);
-            Vector2 startMessagePosition = new Vector2(player.Position.X + 300,player.Position.Y);
+            Rectangle backgroundPosition;
+            Vector2 scorePosition, titlePosition, highScorePosition, skinMessagePosition, startMessagePosition;
+            backgroundPosition = new Rectangle(0, 0, DefaultWidth, DefaultHeight);
+            scorePosition = new Vector2((graphics.PreferredBackBufferWidth / 2) - FontRadius, ScoreYPosition);
+            titlePosition = new Vector2((graphics.PreferredBackBufferWidth / 2) - TitleRadius, ScoreYPosition);
+            highScorePosition = new Vector2((graphics.PreferredBackBufferWidth / 2) - HighScoreRadius, (graphics.PreferredBackBufferHeight / 2) + HighScoreYPositionOffset);
+            skinMessagePosition = new Vector2(player.Position.X - 500, player.Position.Y);
+            startMessagePosition = new Vector2(player.Position.X + 300, player.Position.Y);
 
-            // Always draw background and player
+            // Always draw background
             spriteBatch.Draw(backgroundSprite, backgroundPosition, null, Color.White);
-            player.Draw(spriteBatch);
-
+            
             // Draw Based on game condition 
             if (inGameLoop) {
                 foreach (Pipe pipe in pipesList) {
@@ -168,10 +194,12 @@ namespace Snappy_Deluxe {
             else {
                 spriteBatch.DrawString(spriteFont, "Snappy Deluxe", titlePosition, Color.White);
                 spriteBatch.DrawString(spriteFont, "High Score: " + highScore.ToString(), highScorePosition, Color.White);
-                spriteBatch.DrawString(messageSpriteFont, "Use up and down \nkeys to change skins", skinMessagePosition , Color.White);
-                spriteBatch.DrawString(messageSpriteFont, "Press space to start", startMessagePosition , Color.White);
-            }
+                spriteBatch.DrawString(messageSpriteFont, "Use up and down \nkeys to change skins", skinMessagePosition, Color.White);
+                spriteBatch.DrawString(messageSpriteFont, "Press space to start", startMessagePosition, Color.White);
+            } 
+            player.Draw(spriteBatch);
         }
+
 
         /**
          * Score Method: 
@@ -185,7 +213,7 @@ namespace Snappy_Deluxe {
                 score += ScoreValue;
                 Sounds.scoreSound.Play();
                 if (score > highScore) {
-                    highScore = score;
+                    highScore = (int)score;
                 }
                 return true;
             }
@@ -217,7 +245,11 @@ namespace Snappy_Deluxe {
          *
          */
         public bool CollisionDetected(GraphicsDeviceManager graphics, Player player, Pipe pipe) {
-
+            
+            // Don't detect collisions if collided is true 
+            if (collided) {
+                return false;
+            }
             // Return true if player is out of bounds on the Y position 
             if (player.Position.Y >= graphics.PreferredBackBufferHeight - GroundCollision) {
                 return true;
@@ -227,8 +259,8 @@ namespace Snappy_Deluxe {
             bool inXArea = false;
             int pipeLeftMaximum = (int)pipe.Position.X - pipe.HalfWidth;
             int pipeRightMaximum = (int)pipe.Position.X + pipe.HalfWidth;
-            int playerLeftCheck = (int)(player.Position.X + player.Radius) - CollisionOffset;
-            int playerRightCheck = (int)(player.Position.X - player.Radius) + CollisionOffset;
+            int playerLeftCheck = (int)(player.Position.X + player.Radius);
+            int playerRightCheck = (int)(player.Position.X - player.Radius);
             if (playerLeftCheck > pipeLeftMaximum && playerRightCheck < pipeRightMaximum) {
                 inXArea = true; 
             }
@@ -241,19 +273,50 @@ namespace Snappy_Deluxe {
 
             // Determine if a collision took place 
             if (inXArea && abovePlayer) {
-                int yCollisionVal = (int)(pipe.Position.Y + pipe.HalfHeight) - CollisionOffset;
+                int yCollisionVal = (int)(pipe.Position.Y + pipe.HalfHeight);
                 if (player.Position.Y < yCollisionVal) {
                     return true;
                 }
             }
             else if (inXArea && !abovePlayer) {
-                int yCollisionVal = (int)(pipe.Position.Y - pipe.HalfHeight) + CollisionOffset;
+                int yCollisionVal = (int)(pipe.Position.Y - pipe.HalfHeight);
                 if (player.Position.Y > yCollisionVal) {
                     return true;
                 }
             }
 
             // Default return value (no collision took place)            
+            return false;
+        }
+        
+        /**
+         * IsPLayerOutOfBounds method:
+         *
+         * returns whether or not the player
+         * is out of bounds
+         *
+         * @Param: player <Player>
+         * @Param: graphics <GraphicsDeviceManager>
+         * @Return: boolean representing if the player is out of bounds
+         */
+        public bool IsPlayerOutOfBounds(Player player, GraphicsDeviceManager graphics) { 
+            
+            // variables representing screen boundaries & player position
+            int left = 0; 
+            int top = 0;
+            int bottom = graphics.PreferredBackBufferHeight - GroundHeight;
+            int playerPositionX = (int)player.Position.X;
+            int playerPositionY = (int)player.Position.Y; 
+            
+            // logic to detect if player is out of bounds 
+            if (playerPositionX <= left) {
+                return true;
+            }
+            if (playerPositionY <= top || playerPositionY >= bottom) {
+                return true;
+            }
+
+            // Default return
             return false;
         }
     }

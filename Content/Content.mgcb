@@ -13,6 +13,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Sounds/BirdDying.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/BirdDying.wav
+
 #begin Sounds/BirdFlap.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

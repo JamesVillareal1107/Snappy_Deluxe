@@ -15,6 +15,7 @@ public static class Sounds {
 	public static SoundEffect jumpSound; 
 	public static SoundEffect deathSound; 
 	public static SoundEffect scoreSound;
+	public static SoundEffect birdDying;
 	public static Song backgroundMusic; 
 	
 }
