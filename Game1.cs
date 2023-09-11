@@ -237,9 +237,27 @@ namespace Snappy_Deluxe {
             
             // Apply screen state
             ApplyFullScreenChange(oldIsFullScreen);
-        } 
+        }
         
-        
+        /**
+         * ToggleBorderless method:
+         *
+         * toggles borderless mode
+         *
+         * @param: N/A
+         * @return: N/A
+         */
+        private void ToggleBorderless() {
+            // Declare old screen state 
+            bool oldIsFullScreen = isFullScreen;
+            
+            // toggle borderless and set fullscreen to borderless
+            isBorderless = !isBorderless;
+            isFullScreen = isBorderless; 
+            
+            // apply screen change
+            ApplyFullScreenChange(oldIsFullScreen);
+        }
         
     }
 }
