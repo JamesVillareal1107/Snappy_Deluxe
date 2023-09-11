@@ -92,8 +92,7 @@ namespace Snappy_Deluxe {
         {
 
             // if the game is not started, make sure collided is false 
-            if (!inGameLoop)
-            {
+            if (!inGameLoop){
                 collided = false;
             }
 
@@ -105,67 +104,105 @@ namespace Snappy_Deluxe {
             StartGame(player);
 
             // Main game loop
-            if (inGameLoop)
-            {
+            if (inGameLoop) {
 
                 // Start/setup main game loop 
-                if (startOfGame)
-                {
-                    startOfGame = false;
-                    PipeSpawner.SpawnPipes(topPipeSprite, bottomPipeSprite, pipesList);
-                }
-
+                StartupSpawn(pipesList, topPipeSprite, bottomPipeSprite);
 
                 // Spawn Pipes 
-                if (!collided)
-                {
-                    spawnTimer -= gameTime.ElapsedGameTime.TotalSeconds;
-                    if (spawnTimer <= 0)
-                    {
-                        int spawnPoint = spawnOffset.Next(-MaxSpawnOffset, MaxSpawnOffset);
-                        PipeSpawner.SpawnPipesRandom(topPipeSprite, bottomPipeSprite, pipesList, spawnPoint);
-                        spawnTimer = DefaultTime;
-                    }
-                }
+                PipeSpawnLoop(gameTime, spawnOffset, pipesList, topPipeSprite, bottomPipeSprite);
 
                 // Update Pipes and increment score when applicable
-                foreach (Pipe pipe in pipesList)
-                {
-                    if (CollisionDetected(graphics, player, pipe) && !collided)
-                    {
-                        collided = true;
-                        Sounds.birdDying.Play();
-                    }
-                    if (!collided)
-                    {
-                        pipe.Update(gameTime);
-                        ScoreCheck(player, pipe);
-                        DeletePipe(pipe, pipesList);
-                    }
-                    if (collided)
-                    {
-                        player.Start = false;
-                    }
-                    if (IsPlayerOutOfBounds(player, graphics))
-                    {
-                        inGameLoop = false;
-                        spawnTimer = DefaultTime;
-                        score = DefaultScore;
-                        player.SetDefaultPosition(graphics);
-                        foreach (Pipe remainingPipe in pipesList)
-                        {
-                            remainingPipe.Deleted = true;
-                        }
-                        player.Start = false;
-                        Sounds.deathSound.Play(DefaultDeathVolume, DefaultDeathPitch, DefaultDeathPan);
-                        collided = false;
-                    }
+                foreach (Pipe pipe in pipesList) {
+                    PipeUpdateLoop(gameTime, graphics, player, pipesList, pipe);
+                } 
+                
+                // play death animation if colided
+                if (collided) {
+                    player.Start = false;
+                } 
+                
+                // restart game if player hits out of bounds
+                if (IsPlayerOutOfBounds(player, graphics) && collided) {
+                    RestartGameLoop(graphics, player, pipesList);
                 }
 
             }
 
             // Delete all pipes
             pipesList.RemoveAll(p => p.Deleted);
+        }
+
+        private void StartupSpawn(List<Pipe> pipesList, Texture2D topPipeSprite, Texture2D bottomPipeSprite) {
+            if (startOfGame) {
+                startOfGame = false;
+                PipeSpawner.SpawnPipes(topPipeSprite, bottomPipeSprite, pipesList);
+            }
+        }
+
+        private void PipeSpawnLoop(GameTime gameTime, Random spawnOffset, List<Pipe> pipesList, Texture2D topPipeSprite,
+            Texture2D bottomPipeSprite) {
+            if (!collided) {
+                spawnTimer -= gameTime.ElapsedGameTime.TotalSeconds;
+                if (spawnTimer <= 0) {
+                    int spawnPoint = spawnOffset.Next(-MaxSpawnOffset, MaxSpawnOffset);
+                    PipeSpawner.SpawnPipesRandom(topPipeSprite, bottomPipeSprite, pipesList, spawnPoint);
+                    spawnTimer = DefaultTime;
+                }
+            }
+        }
+
+        /**
+         * PipeUpdateLoop Method:
+         *
+         * Update Loop for pipe logic
+         *
+         * @param: gameTime <GameTime>
+         * @param: graphics <GraphicsDeviceManager>
+         * @param: player <player>
+         * @param: pipesList <List<Pipe>>
+         * @return: N/A
+         */
+        private void PipeUpdateLoop(GameTime gameTime, GraphicsDeviceManager graphics, Player player, List<Pipe> pipesList,
+            Pipe pipe) {
+            if (CollisionDetected(graphics, player, pipe) && !collided) {
+                collided = true;
+                Sounds.birdDying.Play();
+            }
+
+            if (!collided) {
+                pipe.Update(gameTime);
+                ScoreCheck(player, pipe);
+                DeletePipe(pipe, pipesList);
+            }
+        }
+
+        /**
+         * RestartGameLoop Method:
+         *
+         * Resets the game to the title
+         * screen
+         *
+         * @param: graphics <GraphicsDeviceManager>
+         * @param: player <Player>
+         * @param: pipesList <List<Pipe>>
+         */
+        private void RestartGameLoop(GraphicsDeviceManager graphics, Player player, List<Pipe> pipesList) { 
+            
+            // reset game variables and play death sound
+            inGameLoop = false;
+            spawnTimer = DefaultTime;
+            score = DefaultScore;
+            player.SetDefaultPosition(graphics);  
+            player.Start = false;
+            collided = false; 
+            Sounds.deathSound.Play(DefaultDeathVolume, DefaultDeathPitch, DefaultDeathPan);
+            
+            // Delete every pipe currently in the game
+            foreach (Pipe remainingPipe in pipesList) {
+                remainingPipe.Deleted = true;
+            }
+            
         }
 
         /* 

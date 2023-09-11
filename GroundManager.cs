@@ -119,11 +119,15 @@ namespace Snappy_Deluxe {
 		 * @param: graphics <GraphicsDeviceManager>
 		 * @return: N/A
 		 */
-		public void SpawnSingleGround(GraphicsDeviceManager graphics) {
+		public void SpawnSingleGround(GraphicsDeviceManager graphics) { 
+			
+			// Variables representing the 2D coordinates of the ground object 
 			int positionX = (graphics.PreferredBackBufferWidth / 2) + ((Ground.width) * 2);
-			int positionY = graphics.PreferredBackBufferHeight - (Ground.height/2);
+			int positionY = graphics.PreferredBackBufferHeight - (Ground.height/2); 
+
+			// establish position as a a vector 2 and spawn by adding to groundList
 			Vector2 spawnPosition = new Vector2(positionX,positionY); 
-			groundList.Add(new Ground(spawnPosition, groundSprite));
+			groundList.Add(new Ground(spawnPosition, groundSprite)); 
 		}
 		
 		/**
