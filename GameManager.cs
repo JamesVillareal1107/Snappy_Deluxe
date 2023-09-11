@@ -101,7 +101,7 @@ namespace Snappy_Deluxe {
             score = (int)score;
 
             // Game Start logic 
-            StartGame(player);
+            StartGameBasedOnKeyboardInput(player);
 
             // Main game loop
             if (inGameLoop) {
@@ -153,15 +153,18 @@ namespace Snappy_Deluxe {
          * @return: N/A
          */
         private void PipeUpdateLoop(GameTime gameTime, GraphicsDeviceManager graphics, Player player, List<Pipe> pipesList,
-            Pipe pipe) {
+            Pipe pipe) {  
+            
+            // collision behavior
             if (CollisionDetected(graphics, player, pipe) && !collided) {
                 collided = true;
                 Sounds.birdDying.Play();
             }
-
+            
+            // main update loop for all pipes
             if (!collided) {
                 pipe.Update(gameTime);
-                ScoreCheck(player, pipe);
+                ScoreCheck(player, pipe); 
                 DeletePipe(pipe, pipesList);
             }
         }
@@ -202,8 +205,12 @@ namespace Snappy_Deluxe {
          * @return: N/A  
          *  
          */ 
-        private void StartGame(Player player){
-            KeyboardState keyboardState = Keyboard.GetState();
+        private void StartGameBasedOnKeyboardInput(Player player){ 
+            
+            // Define Keyboard State
+            KeyboardState keyboardState = Keyboard.GetState(); 
+            
+            // set gameloop variables based on keyboard state
             if (keyboardState.IsKeyDown(Keys.Space) && !inGameLoop && player.Start){
                 inGameLoop = true;
                 startOfGame = true;
