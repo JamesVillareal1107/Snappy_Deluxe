@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -34,13 +34,13 @@ namespace Snappy_Deluxe {
         
 
         // Class Properties 
-        public Texture2D Sprite{
-            get { return sprite;}
+        public Texture2D Sprite {
+            get { return sprite; }
             set { sprite = value; }
         }
 
         public Vector2 Position { 
-            get { return position;} 
+            get { return position; } 
             set { position = value; }
         }
 
@@ -82,11 +82,11 @@ namespace Snappy_Deluxe {
          * 
          * Draw pipe sprite at appropriate location
          * based on position and scale variables
-         * 
+         *   
          */
         public void Draw(SpriteBatch spriteBatch) { 
             Rectangle drawPosition = new Rectangle((int)position.X-halfWidth, (int)position.Y-halfHeight, width, height);
-            spriteBatch.Draw(sprite, drawPosition, null, Color.White);
+            spriteBatch.Draw(sprite, drawPosition, Color.White);
         } 
 
     }
