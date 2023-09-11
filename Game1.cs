@@ -214,5 +214,32 @@ namespace Snappy_Deluxe {
                 UnsetFullScreen();
             }
         }
+        
+        /**
+         * ToggleFullScreen method:
+         *
+         * Fullscreen toggle functionality
+         *
+         * @param: N/A
+         * @return: N/A
+         */
+        private void ToggleFullScreen() {
+            // Declare the old screen state
+            bool oldIsFullScreen = isFullScreen;
+            
+            // Toggle screen state variables
+            if (isBorderless) {
+                isBorderless = false;
+            }
+            else {
+                isFullScreen = !isFullScreen;
+            } 
+            
+            // Apply screen state
+            ApplyFullScreenChange(oldIsFullScreen);
+        } 
+        
+        
+        
     }
 }
