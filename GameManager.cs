@@ -105,31 +105,20 @@ namespace Snappy_Deluxe {
 
             // Main game loop
             if (inGameLoop) {
-
-                // Start/setup main game loop 
                 StartupSpawn(pipesList, topPipeSprite, bottomPipeSprite);
-
-                // Spawn Pipes 
                 PipeSpawnLoop(gameTime, spawnOffset, pipesList, topPipeSprite, bottomPipeSprite);
-
-                // Update Pipes and increment score when applicable
                 foreach (Pipe pipe in pipesList) {
                     PipeUpdateLoop(gameTime, graphics, player, pipesList, pipe);
                 } 
-                
-                // play death animation if colided
                 if (collided) {
                     player.Start = false;
                 } 
-                
-                // restart game if player hits out of bounds
                 if (IsPlayerOutOfBounds(player, graphics) && collided) {
                     RestartGameLoop(graphics, player, pipesList);
                 }
-
             }
 
-            // Delete all pipes
+            // Delete all pipes when not in the game loop
             pipesList.RemoveAll(p => p.Deleted);
         }
 
