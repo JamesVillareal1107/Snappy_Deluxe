@@ -156,7 +156,6 @@ namespace Snappy_Deluxe {
          * @return: N/A
          */
         private void SetFullScreen() {
-            
             // set width and height to the maximum values of the user screen
             width = Window.ClientBounds.Width;
             height = Window.ClientBounds.Height;
@@ -168,8 +167,29 @@ namespace Snappy_Deluxe {
 
             // turn on fullscreen and apply all changes
             _graphics.IsFullScreen = true; 
-            _graphics.ApplyChanges(); 
+            _graphics.ApplyChanges();
+        }
+        
+        /**
+         * UnsetFullScreen Method:
+         *
+         * sets screen back to window mode
+         *
+         * @param: N/A
+         * @return: N/A
+         */
+        private void UnsetFullScreen() { 
+            // set width and height to default values
+            width = DefaultWidth;
+            height = DefaultHeight; 
             
+            // set the backbuffer variables to width and height
+            _graphics.PreferredBackBufferWidth = width;
+            _graphics.PreferredBackBufferHeight = height;
+
+            // set fullscreen to false and apply changes
+            _graphics.IsFullScreen = false; 
+            _graphics.ApplyChanges();
         }
     }
 }
