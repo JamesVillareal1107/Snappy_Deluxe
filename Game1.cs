@@ -146,5 +146,30 @@ namespace Snappy_Deluxe {
             _graphics.HardwareModeSwitch = !isBorderless; 
             _graphics.ApplyChanges();
         }
+        
+        /**
+         * SetFullScreen method:
+         *
+         * Sets the game to full screen mode
+         *
+         * @param: N/A
+         * @return: N/A
+         */
+        private void SetFullScreen() {
+            
+            // set width and height to the maximum values of the user screen
+            width = Window.ClientBounds.Width;
+            height = Window.ClientBounds.Height;
+            
+            // Modify preferred backbuffer values and hardware mode
+            _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            _graphics.HardwareModeSwitch = !isBorderless;
+
+            // turn on fullscreen and apply all changes
+            _graphics.IsFullScreen = true; 
+            _graphics.ApplyChanges(); 
+            
+        }
     }
 }
