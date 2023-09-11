@@ -23,7 +23,6 @@ namespace Snappy_Deluxe {
         private const int HighScoreRadius = 288;
         private const int HighScoreYPositionOffset = 150;
         private const double ScoreValue = 0.5;
-        private const int CollisionOffset = 1;
         private const int GroundCollision = 96;
         private const float DefaultDeathVolume = 0.5f;
         private const float DefaultDeathPitch = 1f;
@@ -118,7 +117,7 @@ namespace Snappy_Deluxe {
                 }
             }
 
-            // Delete all pipes when not in the game loop
+            // Delete all pipes with the deleted tag
             pipesList.RemoveAll(p => p.Deleted);
         }
 
