@@ -191,5 +191,28 @@ namespace Snappy_Deluxe {
             _graphics.IsFullScreen = false; 
             _graphics.ApplyChanges();
         }
+        
+        /**
+         * ApplyFullScreenChange method:
+         *
+         * applies fullscreen changes when called
+         * based on the previous state of the screen
+         *
+         * @param: oldIsFullScreen <bool>
+         * @return: N/A
+         */
+        private void ApplyFullScreenChange(bool oldIsFullScreen) {
+            if (isFullScreen) {
+                if (oldIsFullScreen) {
+                    ApplyHardwareMode();
+                }
+                else {
+                    SetFullScreen();
+                }
+            }
+            else {
+                UnsetFullScreen();
+            }
+        }
     }
 }
