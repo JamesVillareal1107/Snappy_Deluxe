@@ -15,9 +15,14 @@ namespace Snappy_Deluxe {
         private const int DefaultHeight = 720;
         private const float SongVolume = 0.1f;
 
-        // graphics devices
+        // graphics devices and variables
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private bool isFullScreen;
+        private bool isBorderless;
+        private int width; 
+        private int height; 
+        
 
         // Sprites & SpriteFonts
         private Texture2D backgroundSprite;
@@ -44,6 +49,10 @@ namespace Snappy_Deluxe {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            isFullScreen = false;
+            isBorderless = false;
+            width = DefaultWidth;
+            height = DefaultHeight;
         }
 
         protected override void Initialize() {
@@ -51,8 +60,9 @@ namespace Snappy_Deluxe {
             // TODO: Add your initialization logic here 
 
             // Default Screensize
-            _graphics.PreferredBackBufferWidth = DefaultWidth;
-            _graphics.PreferredBackBufferHeight = DefaultHeight; 
+            _graphics.PreferredBackBufferWidth = width;
+            _graphics.PreferredBackBufferHeight = height;
+            _graphics.IsFullScreen = false;
             _graphics.ApplyChanges();
 
             base.Initialize();
@@ -110,6 +120,7 @@ namespace Snappy_Deluxe {
             base.Update(gameTime);
         }
 
+        
         protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
@@ -120,6 +131,20 @@ namespace Snappy_Deluxe {
             _spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+        
+        /**
+         * ApplyHardwareMode method:
+         *
+         * Sets the value of hardware mode to the opposite
+         * of the borderless value at all times
+         *
+         * @param: N/A
+         * @return: N/A
+         */
+        private void ApplyHardwareMode() {
+            _graphics.HardwareModeSwitch = !isBorderless; 
+            _graphics.ApplyChanges();
         }
     }
 }

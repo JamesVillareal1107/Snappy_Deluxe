@@ -127,7 +127,20 @@ namespace Snappy_Deluxe {
                 PipeSpawner.SpawnPipes(topPipeSprite, bottomPipeSprite, pipesList);
             }
         }
-
+        
+        /**
+         * PipeSpawnLoop Method:
+         *
+         * Main Update loop of the pipe spawning
+         * when in the main game loop
+         *
+         * @param: gameTime <GameTime>
+         * @param: spawnOffset <Random>
+         * @param: pipesList <List<Pipes>>
+         * @param: topSprite <Texture2D>
+         * @param: bottomSprite <Texture2D>
+         * @return: N/A
+         */
         private void PipeSpawnLoop(GameTime gameTime, Random spawnOffset, List<Pipe> pipesList, Texture2D topPipeSprite,
             Texture2D bottomPipeSprite) {
             if (!collided) {
