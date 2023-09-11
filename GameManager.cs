@@ -88,38 +88,40 @@ namespace Snappy_Deluxe {
          *
          */
         public void Update(GameTime gameTime, GraphicsDeviceManager graphics, Player player, Random spawnOffset,
-                List<Pipe> pipesList, Texture2D topPipeSprite, Texture2D bottomPipeSprite) { 
-            
+                List<Pipe> pipesList, Texture2D topPipeSprite, Texture2D bottomPipeSprite)
+        {
+
             // if the game is not started, make sure collided is false 
-            if (!inGameLoop) {
+            if (!inGameLoop)
+            {
                 collided = false;
             }
-            
+
             // Update player and cast score to int at all times 
-            player.Update(gameTime,this);
+            player.Update(gameTime, this);
             score = (int)score;
 
             // Game Start logic 
-            KeyboardState keyboardState = Keyboard.GetState();
-            if (keyboardState.IsKeyDown(Keys.Space) && !inGameLoop && player.Start) {
-                inGameLoop = true;
-                startOfGame = true;
-            }
+            StartGame(player);
 
             // Main game loop
-            if (inGameLoop) {
+            if (inGameLoop)
+            {
 
                 // Start/setup main game loop 
-                if (startOfGame) {
+                if (startOfGame)
+                {
                     startOfGame = false;
                     PipeSpawner.SpawnPipes(topPipeSprite, bottomPipeSprite, pipesList);
                 }
-                
+
 
                 // Spawn Pipes 
-                if (!collided) {
+                if (!collided)
+                {
                     spawnTimer -= gameTime.ElapsedGameTime.TotalSeconds;
-                    if (spawnTimer <= 0) {
+                    if (spawnTimer <= 0)
+                    {
                         int spawnPoint = spawnOffset.Next(-MaxSpawnOffset, MaxSpawnOffset);
                         PipeSpawner.SpawnPipesRandom(topPipeSprite, bottomPipeSprite, pipesList, spawnPoint);
                         spawnTimer = DefaultTime;
@@ -127,25 +129,31 @@ namespace Snappy_Deluxe {
                 }
 
                 // Update Pipes and increment score when applicable
-                foreach (Pipe pipe in pipesList) {
-                    if (CollisionDetected(graphics, player, pipe) && !collided) {
+                foreach (Pipe pipe in pipesList)
+                {
+                    if (CollisionDetected(graphics, player, pipe) && !collided)
+                    {
                         collided = true;
                         Sounds.birdDying.Play();
                     }
-                    if (!collided) {
-                        pipe.Update(gameTime); 
+                    if (!collided)
+                    {
+                        pipe.Update(gameTime);
                         ScoreCheck(player, pipe);
                         DeletePipe(pipe, pipesList);
                     }
-                    if (collided) {
+                    if (collided)
+                    {
                         player.Start = false;
                     }
-                    if (IsPlayerOutOfBounds(player, graphics)) {
+                    if (IsPlayerOutOfBounds(player, graphics))
+                    {
                         inGameLoop = false;
                         spawnTimer = DefaultTime;
                         score = DefaultScore;
                         player.SetDefaultPosition(graphics);
-                        foreach (Pipe remainingPipe in pipesList) {
+                        foreach (Pipe remainingPipe in pipesList)
+                        {
                             remainingPipe.Deleted = true;
                         }
                         player.Start = false;
@@ -154,10 +162,26 @@ namespace Snappy_Deluxe {
                     }
                 }
 
-            } 
-            
+            }
+
             // Delete all pipes
             pipesList.RemoveAll(p => p.Deleted);
+        }
+
+        /* 
+         * StarGame Method: 
+         * start the game based on player input 
+         * 
+         * @param: player <Player> 
+         * @return: N/A  
+         *  
+         */ 
+        private void StartGame(Player player){
+            KeyboardState keyboardState = Keyboard.GetState();
+            if (keyboardState.IsKeyDown(Keys.Space) && !inGameLoop && player.Start){
+                inGameLoop = true;
+                startOfGame = true;
+            }
         }
 
         /**
@@ -197,7 +221,7 @@ namespace Snappy_Deluxe {
                 spriteBatch.DrawString(messageSpriteFont, "Use up and down \nkeys to change skins", skinMessagePosition, Color.White);
                 spriteBatch.DrawString(messageSpriteFont, "Press space to start", startMessagePosition, Color.White);
             } 
-            player.Draw(spriteBatch);
+            player.Draw(spriteBatch); 
         }
 
 
@@ -319,5 +343,6 @@ namespace Snappy_Deluxe {
             // Default return
             return false;
         }
-    }
+    } 
+
 }
