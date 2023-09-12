@@ -60,13 +60,12 @@ namespace Snappy_Deluxe {
             // TODO: Add your initialization logic here 
 
             // Default Screensize
-            _graphics.PreferredBackBufferWidth = width;
-            _graphics.PreferredBackBufferHeight = height;
-            _graphics.IsFullScreen = false;
-            _graphics.ApplyChanges();
+            SetDefaultScreenResolution();
 
             base.Initialize();
         }
+
+        
 
         protected override void LoadContent() {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -134,129 +133,37 @@ namespace Snappy_Deluxe {
         }
         
         /**
-         * ApplyHardwareMode method:
+         * SetDefaultScreenResolution():
          *
-         * Sets the value of hardware mode to the opposite
-         * of the borderless value at all times
-         *
-         * @param: N/A
-         * @return: N/A
-         */
-        private void ApplyHardwareMode() {
-            _graphics.HardwareModeSwitch = !isBorderless; 
-            _graphics.ApplyChanges();
-        }
-        
-        /**
-         * SetFullScreen method:
-         *
-         * Sets the game to full screen mode
+         * Sets the default screen resolution for the game
+         * on start up
          *
          * @param: N/A
          * @return: N/A
          */
-        private void SetFullScreen() {
-            // set width and height to the maximum values of the user screen
-            width = Window.ClientBounds.Width;
-            height = Window.ClientBounds.Height;
-            
-            // Modify preferred backbuffer values and hardware mode
-            _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            _graphics.HardwareModeSwitch = !isBorderless;
-
-            // turn on fullscreen and apply all changes
-            _graphics.IsFullScreen = true; 
-            _graphics.ApplyChanges();
-        }
-        
-        /**
-         * UnsetFullScreen Method:
-         *
-         * sets screen back to window mode
-         *
-         * @param: N/A
-         * @return: N/A
-         */
-        private void UnsetFullScreen() { 
-            // set width and height to default values
-            width = DefaultWidth;
-            height = DefaultHeight; 
-            
-            // set the backbuffer variables to width and height
+        private void SetDefaultScreenResolution() {
             _graphics.PreferredBackBufferWidth = width;
             _graphics.PreferredBackBufferHeight = height;
-
-            // set fullscreen to false and apply changes
-            _graphics.IsFullScreen = false; 
+            _graphics.IsFullScreen = false;
+            _graphics.ApplyChanges();
+        } 
+        
+        /**
+         * ChangeResolution Method:
+         *
+         * Changes the resolution of the
+         * screen
+         */
+        private void ChangeResolution(int width, int height) {
+            _graphics.PreferredBackBufferWidth = width;
+            _graphics.PreferredBackBufferHeight = height;  
+            ScaleSprites(width, height);
             _graphics.ApplyChanges();
         }
         
-        /**
-         * ApplyFullScreenChange method:
-         *
-         * applies fullscreen changes when called
-         * based on the previous state of the screen
-         *
-         * @param: oldIsFullScreen <bool>
-         * @return: N/A
-         */
-        private void ApplyFullScreenChange(bool oldIsFullScreen) {
-            if (isFullScreen) {
-                if (oldIsFullScreen) {
-                    ApplyHardwareMode();
-                }
-                else {
-                    SetFullScreen();
-                }
-            }
-            else {
-                UnsetFullScreen();
-            }
-        }
-        
-        /**
-         * ToggleFullScreen method:
-         *
-         * Fullscreen toggle functionality
-         *
-         * @param: N/A
-         * @return: N/A
-         */
-        private void ToggleFullScreen() {
-            // Declare the old screen state
-            bool oldIsFullScreen = isFullScreen;
+        // TODO: Implement ScaleSprites by making all of the sprites scalable
+        private void ScaleSprites(int width, int height) {
             
-            // Toggle screen state variables
-            if (isBorderless) {
-                isBorderless = false;
-            }
-            else {
-                isFullScreen = !isFullScreen;
-            } 
-            
-            // Apply screen state
-            ApplyFullScreenChange(oldIsFullScreen);
-        }
-        
-        /**
-         * ToggleBorderless method:
-         *
-         * toggles borderless mode
-         *
-         * @param: N/A
-         * @return: N/A
-         */
-        private void ToggleBorderless() {
-            // Declare old screen state 
-            bool oldIsFullScreen = isFullScreen;
-            
-            // toggle borderless and set fullscreen to borderless
-            isBorderless = !isBorderless;
-            isFullScreen = isBorderless; 
-            
-            // apply screen change
-            ApplyFullScreenChange(oldIsFullScreen);
         }
         
     }
