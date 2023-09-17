@@ -37,7 +37,6 @@ namespace Snappy_Deluxe {
         private double highScore;
         private bool collided;
 
-
         // Constructors
         public GameManager() {
             inGameLoop = false;
@@ -78,6 +77,8 @@ namespace Snappy_Deluxe {
             get { return highScore; }
             set { highScore = value; }
         }
+
+        
     
         /** 
          * Update method: 
@@ -96,7 +97,7 @@ namespace Snappy_Deluxe {
             }
 
             // Update player and cast score to int at all times 
-            player.Update(gameTime, this);
+            player.Update(gameTime, this, graphics);
             score = (int)score;
 
             // Game Start logic 
@@ -175,7 +176,7 @@ namespace Snappy_Deluxe {
             
             // main update loop for all pipes
             if (!collided) {
-                pipe.Update(gameTime);
+                pipe.Update(gameTime, graphics);
                 ScoreCheck(player, pipe); 
                 DeletePipe(pipe, pipesList);
             }
@@ -240,10 +241,9 @@ namespace Snappy_Deluxe {
         public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D backgroundSprite, Player player, Random spawnOffset,
                 List<Pipe> pipesList, SpriteFont spriteFont, SpriteFont messageSpriteFont)
         {
-            // Drawing variables 
-            Rectangle backgroundPosition;
+            // Drawing variables  
+            Rectangle backgroundPosition = new Rectangle(0,0,graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
             Vector2 scorePosition, titlePosition, highScorePosition, skinMessagePosition, startMessagePosition;
-            backgroundPosition = new Rectangle(0, 0, DefaultWidth, DefaultHeight);
             scorePosition = new Vector2((graphics.PreferredBackBufferWidth / 2) - FontRadius, ScoreYPosition);
             titlePosition = new Vector2((graphics.PreferredBackBufferWidth / 2) - TitleRadius, ScoreYPosition);
             highScorePosition = new Vector2((graphics.PreferredBackBufferWidth / 2) - HighScoreRadius, (graphics.PreferredBackBufferHeight / 2) + HighScoreYPositionOffset);
@@ -251,7 +251,7 @@ namespace Snappy_Deluxe {
             startMessagePosition = new Vector2(player.Position.X + 300, player.Position.Y);
 
             // Always draw background
-            spriteBatch.Draw(backgroundSprite, backgroundPosition, null, Color.White);
+            spriteBatch.Draw(backgroundSprite, backgroundPosition, Color.White);
             
             // Draw Based on game condition 
             if (inGameLoop) {
@@ -262,7 +262,7 @@ namespace Snappy_Deluxe {
             }
             else {
                 spriteBatch.DrawString(spriteFont, "Snappy Deluxe", titlePosition, Color.White);
-                spriteBatch.DrawString(spriteFont, "High Score: " + highScore.ToString(), highScorePosition, Color.White);
+                spriteBatch.DrawString(spriteFont, "High Score: " + highScore, highScorePosition, Color.White);
                 spriteBatch.DrawString(messageSpriteFont, "Use up and down \nkeys to change skins", skinMessagePosition, Color.White);
                 spriteBatch.DrawString(messageSpriteFont, "Press space to start", startMessagePosition, Color.White);
             } 
@@ -388,6 +388,5 @@ namespace Snappy_Deluxe {
             // Default return
             return false;
         }
-    } 
-
+    }
 }

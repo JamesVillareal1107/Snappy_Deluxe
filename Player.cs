@@ -16,11 +16,12 @@ namespace Snappy_Deluxe {
         private const int DefaultVelocity = 0; 
         private const int MaxVelocity = 1000;
         private const int VelocityChange = 35;
-        private const int PlayerScale = 80;
+        private const int DefaultPlayerScale = 80;
         private const float UpwardsRotation = 1.2f;
         private const float DownwardsRotation = 1f;
         private const float RotationOffset = 0.5f; 
-        private const int DeathRotation = 1600; 
+        private const int DeathRotation = 1600;
+        private const int ScalingValue = 16;
         
 
         // Instance variables
@@ -33,6 +34,7 @@ namespace Snappy_Deluxe {
         private List<Texture2D> sprites;
         private Texture2D currentSprite;
         private float rotation;
+        private float scale;
 
         // Constructor
         public Player(GraphicsDeviceManager graphics, List<Texture2D> sprites) {
@@ -45,6 +47,7 @@ namespace Snappy_Deluxe {
             this.sprites = sprites;
             currentSprite = sprites[0];
             rotation = 0;
+            scale = DefaultPlayerScale;
         }
 
         // Properties/Getters
@@ -61,6 +64,7 @@ namespace Snappy_Deluxe {
             get { return start; }
             set { start = value; }
         }
+        
 
         /** 
          * Update method: 
@@ -71,7 +75,7 @@ namespace Snappy_Deluxe {
          * 
          * @param gameTime 
          */
-        public void Update(GameTime gameTime, GameManager manager) { 
+        public void Update(GameTime gameTime, GameManager manager, GraphicsDeviceManager graphics) { 
             
             // Change skins if applicable 
             SetCurrentSprite();
@@ -81,7 +85,10 @@ namespace Snappy_Deluxe {
 
             // movement logic 
             Movement(gameTime, startState, manager);
-            Rotate(gameTime, manager);
+            Rotate(gameTime, manager); 
+            
+            // update scale when neccesary  
+            scale = graphics.PreferredBackBufferWidth / ScalingValue;
         }
         
         /**
@@ -135,7 +142,7 @@ namespace Snappy_Deluxe {
          * @param: deltaTime <float>
          * @return: N/A
          */
-        private void DeathAnimation(float deltaTime) {
+        private void DeathAnimation(float deltaTime){
             position.Y += gravity * deltaTime;
             position.X -= velocity * deltaTime;
         }
@@ -148,7 +155,7 @@ namespace Snappy_Deluxe {
          *
          */
         public void Draw(SpriteBatch spriteBatch){ 
-            Rectangle playerPosition = new Rectangle((int)position.X,(int)position.Y,PlayerScale,PlayerScale);
+            Rectangle playerPosition = new Rectangle((int)position.X,(int)position.Y,(int)scale,(int)scale);
             spriteBatch.Draw(currentSprite,playerPosition, null , Color.White, MathHelper.ToRadians(rotation), new Vector2(RotationOffset,RotationOffset), SpriteEffects.None, 0); 
         } 
 

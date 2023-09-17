@@ -8,9 +8,9 @@ namespace Snappy_Deluxe {
     internal static class PipeSpawner {
 
         // Constants 
-        private const int positionX = 1580;
-        private const int positionY = 360;
-        private const int offset = 500;
+        private static int positionX = 1580;
+        private static int positionY = 360;
+        private static int offset = 500;
 
         /** 
          * SpawnPipes method: 
@@ -33,6 +33,20 @@ namespace Snappy_Deluxe {
         public static void SpawnPipesRandom(Texture2D topSprite, Texture2D bottomSprite, List<Pipe> pipeList, int rand) {  
             pipeList.Add(new Pipe(topSprite, positionX, positionY - offset+rand));
             pipeList.Add(new Pipe(bottomSprite, positionX, positionY + offset + rand));
+        }
+        
+        
+        /** 
+         * SetScale method:
+         * 
+         * Sets values of positionX, PositionY, and Offset
+         * based on the scale of the graphics device manager
+         *
+         * @param: graphics <GraphicsDeviceManager>
+         */
+        public static void SetScale(GraphicsDeviceManager graphics) {
+	        
+	        
         }
     }
 }

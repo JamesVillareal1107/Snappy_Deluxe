@@ -12,7 +12,9 @@ namespace Snappy_Deluxe {
 
         // Constants 
         private const int DefaultWidth = 1280;
-        private const int DefaultHeight = 720;
+        private const int DefaultHeight = 720; 
+        private const int MaxWidth = 1920;
+        private const int MaxHeight = 1080;
         private const float SongVolume = 0.1f;
 
         // graphics devices and variables
@@ -21,8 +23,9 @@ namespace Snappy_Deluxe {
         private bool isFullScreen;
         private bool isBorderless;
         private int width; 
-        private int height; 
-        
+        private int height;
+        private KeyboardState oldKeyboardState;
+
 
         // Sprites & SpriteFonts
         private Texture2D backgroundSprite;
@@ -53,6 +56,7 @@ namespace Snappy_Deluxe {
             isBorderless = false;
             width = DefaultWidth;
             height = DefaultHeight;
+            oldKeyboardState = Keyboard.GetState();
         }
 
         protected override void Initialize() {
@@ -60,7 +64,8 @@ namespace Snappy_Deluxe {
             // TODO: Add your initialization logic here 
 
             // Default Screensize
-            SetDefaultScreenResolution();
+            SetDefaultScreenResolution(); 
+            
 
             base.Initialize();
         }
@@ -112,9 +117,18 @@ namespace Snappy_Deluxe {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here 
+            // TODO: Add your update logic here  
+            
+            // Update gamestate and ground spawner
             gameState.Update(gameTime, _graphics, player, spawnOffset, pipesList, pipeUpSprite, pipeDownSprite);
             grounds.Update(gameTime, _graphics, gameState);
+            
+            // Toggle Fullscreen logic
+            KeyboardState keyboardState = Keyboard.GetState();
+            ToggleFullScreen(keyboardState, oldKeyboardState, gameState, grounds, player); 
+            
+            // prevent sticky keys
+            oldKeyboardState = keyboardState;
             
             base.Update(gameTime);
         }
@@ -154,16 +168,38 @@ namespace Snappy_Deluxe {
          * Changes the resolution of the
          * screen
          */
-        private void ChangeResolution(int width, int height) {
+        private void ChangeResolution(int width, int height, GameManager gameState, GroundManager grounds, Player player) {
             _graphics.PreferredBackBufferWidth = width;
-            _graphics.PreferredBackBufferHeight = height;  
-            ScaleSprites(width, height);
+            _graphics.PreferredBackBufferHeight = height;
             _graphics.ApplyChanges();
+            base.Initialize();
         }
         
-        // TODO: Implement ScaleSprites by making all of the sprites scalable
-        private void ScaleSprites(int width, int height) {
-            
+        /**
+         * ToggleFullScreen Method:
+         *
+         * Switches the window size and pixel scaling
+         * between 1280x720 and 1920x1080 based on
+         * the value of isFullScreen
+         *
+         * @param: kState <keyboardState>
+         * @param: gameState <GameManager>
+         * @param: grounds <GroundManager>
+         * @param: player <Player>
+         * @return: N/A
+         * 
+         */
+        private void ToggleFullScreen(KeyboardState kState, KeyboardState oldKeyboardState, GameManager gameState, GroundManager grounds, Player player) {
+            if (kState.IsKeyDown(Keys.M) && oldKeyboardState.IsKeyUp(Keys.M)) {
+                if (!isFullScreen) {
+                    ChangeResolution(MaxWidth,MaxHeight, gameState, grounds, player);
+                    isFullScreen = true;
+                }
+                else {
+                    ChangeResolution(DefaultWidth,DefaultHeight, gameState, grounds, player);
+                    isFullScreen = false;
+                }
+            }
         }
         
     }
