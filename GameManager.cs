@@ -278,7 +278,7 @@ namespace Snappy_Deluxe {
          *
          */
         public bool ScoreCheck(Player player, Pipe pipe) {
-            if ((int)player.Position.X == (int)pipe.Position.X) {
+            if (player.Position.X == pipe.Position.X) {
                 score += ScoreValue;
                 Sounds.scoreSound.Play();
                 if (score > highScore) {

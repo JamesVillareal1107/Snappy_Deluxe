@@ -193,10 +193,12 @@ namespace Snappy_Deluxe {
             if (kState.IsKeyDown(Keys.M) && oldKeyboardState.IsKeyUp(Keys.M)) {
                 if (!isFullScreen) {
                     ChangeResolution(MaxWidth,MaxHeight, gameState, grounds, player);
+                    PipeSpawner.SetScale(_graphics);
                     isFullScreen = true;
                 }
                 else {
-                    ChangeResolution(DefaultWidth,DefaultHeight, gameState, grounds, player);
+                    ChangeResolution(DefaultWidth,DefaultHeight, gameState, grounds, player); 
+                    PipeSpawner.SetScale(_graphics);
                     isFullScreen = false;
                 }
             }
