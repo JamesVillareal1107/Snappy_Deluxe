@@ -28,6 +28,11 @@ namespace Snappy_Deluxe {
         private const float DefaultDeathPitch = 1f;
         private const float DefaultDeathPan = 0f;
         private const int GroundHeight = 96;
+        private const int SmallWidth = 1280; 
+        private const int LargeWidth = 1920;
+        private const double SmallSpawnTime = 1.3;
+        private const double LargeSpawnTime = 1.95;
+        
 
         // Instance Variables
         private bool inGameLoop;
@@ -36,12 +41,14 @@ namespace Snappy_Deluxe {
         private double score;
         private double highScore;
         private bool collided;
+        private double spawnTimerMax;
 
         // Constructors
         public GameManager() {
             inGameLoop = false;
             startOfGame = false;
-            spawnTimer = DefaultTime;
+            spawnTimer = DefaultTime; 
+            spawnTimerMax = DefaultTime;
             score = DefaultScore;
             highScore = DefaultScore;
             collided = false;
@@ -94,6 +101,8 @@ namespace Snappy_Deluxe {
             // if the game is not started, make sure collided is false 
             if (!inGameLoop){
                 collided = false;
+                SetMaxSpawnTimer(graphics);
+                spawnTimer = spawnTimerMax;
             }
 
             // Update player and cast score to int at all times 
@@ -149,7 +158,7 @@ namespace Snappy_Deluxe {
                 if (spawnTimer <= 0) {
                     int spawnPoint = spawnOffset.Next(-MaxSpawnOffset, MaxSpawnOffset);
                     PipeSpawner.SpawnPipesRandom(topPipeSprite, bottomPipeSprite, pipesList, spawnPoint);
-                    spawnTimer = DefaultTime;
+                    spawnTimer = spawnTimerMax;
                 }
             }
         }
@@ -277,15 +286,27 @@ namespace Snappy_Deluxe {
          * when a player passes a group of pipes 
          *
          */
-        public bool ScoreCheck(Player player, Pipe pipe) {
-            if (player.Position.X == pipe.Position.X) {
-                score += ScoreValue;
-                Sounds.scoreSound.Play();
+        public bool ScoreCheck(Player player, Pipe pipe) { 
+            
+            // condition for score
+            if ((int)player.Position.X >= (int)pipe.Position.X && !pipe.Tagged) { 
+                // Increment score
+                score += ScoreValue; 
+                
+                // play score sound effect
+                Sounds.scoreSound.Play(); 
+                
+                // Update high shore if neccesary
                 if (score > highScore) {
                     highScore = (int)score;
                 }
+                
+                // tag pipe and return
+                pipe.Tagged = true;
                 return true;
-            }
+            } 
+            
+            // default return value (score did not take place
             return false;
         }
 
@@ -387,6 +408,24 @@ namespace Snappy_Deluxe {
 
             // Default return
             return false;
+        }
+        
+        /**
+         * SetMaxSpawnTimer method:
+         * 
+         * sets MaxSpawnTimer based on the
+         * window size.
+         *
+         * @param: graphics <GraphicsDeviceManager>
+         * @return: N/A
+         */
+        public void SetMaxSpawnTimer(GraphicsDeviceManager graphics) {
+            if (graphics.PreferredBackBufferWidth <= SmallWidth) {
+                spawnTimerMax = SmallSpawnTime;
+            } 
+            else if (graphics.PreferredBackBufferWidth >= LargeWidth) {
+                spawnTimerMax = LargeSpawnTime;
+            }
         }
     }
 }

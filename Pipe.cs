@@ -25,6 +25,7 @@ namespace Snappy_Deluxe {
         private int halfHeight;
         private int width;
         private int height;
+        private bool tagged;
 
         // Constructors 
         public Pipe(Texture2D sprite, int xPosition, int yPosition) {
@@ -36,6 +37,7 @@ namespace Snappy_Deluxe {
             this.height = DefaultHeight;
             this.halfWidth = DefaultHalfWidth;
             this.halfHeight = DefaultHalfHeight;
+            this.tagged = false;
         }
         
 
@@ -68,6 +70,11 @@ namespace Snappy_Deluxe {
         public int HalfHeight{ 
             get { return halfHeight; }
             set { halfHeight = value; }
+        }
+
+        public bool Tagged {
+            get { return tagged; }
+            set { tagged = value; }
         }
 
         // Class Methods
