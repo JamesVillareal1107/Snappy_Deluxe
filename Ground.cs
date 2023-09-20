@@ -11,24 +11,24 @@ namespace Snappy_Deluxe {
         private const int DefaultWidth = 1280;
         private const int DefaultHeight = 96;
         private const int DefaultGroundRadius = 640;
-        private const int HalfHeight = 24;
+        private const int DefaultQuarterHeight = 24;
         private const int DefaultSpeed = 300; 
         
         // static variables  
-        public static int height = DefaultHeight;
-        public static int width = DefaultWidth;
-        public static int radius = DefaultGroundRadius;
+        public static double height = DefaultHeight;
+        public static double width = DefaultWidth;
+        public static double radius = DefaultGroundRadius;
+        public static double quarterHeight = DefaultQuarterHeight;
+        public static double speed = DefaultSpeed;
         
         // Instance Variables  
         private Vector2 position;
-        private int speed;
         private Texture2D sprite;
         private bool isRemoved;
 
         // Constructors and properties
         public Ground(Vector2 position, Texture2D sprite) {
             this.position = position; 
-            this.speed = DefaultSpeed;
             this.sprite = sprite;
             this.isRemoved = false;
         }
@@ -55,9 +55,8 @@ namespace Snappy_Deluxe {
          */
         public void Update(GameTime gameTime) {
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds; 
-            position.X -= speed * deltaTime;
+            position.X -= (int)(speed * deltaTime);
         } 
-
         
         /**
          * Draw Method:
@@ -68,8 +67,24 @@ namespace Snappy_Deluxe {
          * @return: N/A
          */
         public void Draw(SpriteBatch spriteBatch) {
-            Rectangle groundPosition = new Rectangle((int)position.X-radius,(int)position.Y-HalfHeight, width, height);
+            Rectangle groundPosition = new Rectangle((int)position.X-(int)radius,(int)position.Y-(int)quarterHeight, (int)width, (int)height);
             spriteBatch.Draw(sprite, groundPosition, Color.White);
+        }
+        
+        /**
+         * Scale Method:
+         *
+         * scales the render variables of the
+         * ground sprite based on the window size
+         *
+         * @param: graphics <GraphicsDeviceManager>
+         * @return: N/A
+         */
+        public static void Scale(GraphicsDeviceManager graphics) {
+            width = graphics.PreferredBackBufferWidth;
+            height = graphics.PreferredBackBufferHeight / 7.5;
+            radius = graphics.PreferredBackBufferWidth / 2;
+            quarterHeight = graphics.PreferredBackBufferHeight / 30;
         }
     }
 }

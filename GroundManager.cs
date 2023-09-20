@@ -32,8 +32,7 @@ namespace Snappy_Deluxe {
 			get { return groundList; }
 			set { groundList = value; }
 		}
-
-		// Methods 
+		
 		
 		/**
 		 * Update Method:
@@ -96,18 +95,18 @@ namespace Snappy_Deluxe {
 			
 			// reused variables 
 			int defaultSpawnX = graphics.PreferredBackBufferWidth / 2;
-			int defaultSpawnY = graphics.PreferredBackBufferHeight - (Ground.height/2); 
+			int defaultSpawnY = graphics.PreferredBackBufferHeight - ((int)(Ground.height)/2); 
 			
 			// Spawn First ground object 
 			Vector2 firstPipePosition = new Vector2(defaultSpawnX, defaultSpawnY); 
 			groundList.Add(new Ground(firstPipePosition,groundSprite));
 
 			// Spawn Second ground object 
-			Vector2 secondPipePosition = new Vector2(defaultSpawnX+Ground.width,defaultSpawnY);
+			Vector2 secondPipePosition = new Vector2(defaultSpawnX+(int)(Ground.width),defaultSpawnY);
 			groundList.Add(new Ground(secondPipePosition,groundSprite));
 
 			// Spawn third ground object 
-			Vector2 thirdPipePosition = new Vector2(defaultSpawnX+((Ground.width)*2),defaultSpawnY); 
+			Vector2 thirdPipePosition = new Vector2(defaultSpawnX+((int)(Ground.width)*2),defaultSpawnY); 
 			groundList.Add(new Ground(thirdPipePosition,groundSprite));
 		}
 		
@@ -122,8 +121,8 @@ namespace Snappy_Deluxe {
 		public void SpawnSingleGround(GraphicsDeviceManager graphics) { 
 			
 			// Variables representing the 2D coordinates of the ground object 
-			int positionX = (graphics.PreferredBackBufferWidth / 2) + ((Ground.width) * 2);
-			int positionY = graphics.PreferredBackBufferHeight - (Ground.height/2); 
+			int positionX = (graphics.PreferredBackBufferWidth / 2) + ((int)(Ground.width) * 2);
+			int positionY = graphics.PreferredBackBufferHeight - (int)(Ground.height/2); 
 
 			// establish position as a a vector 2 and spawn by adding to groundList
 			Vector2 spawnPosition = new Vector2(positionX,positionY); 
@@ -140,7 +139,7 @@ namespace Snappy_Deluxe {
 		 */
 		public bool DespawnSingleGround(GraphicsDeviceManager graphics) {
 			Ground leftMost = groundList[0];
-			int deletionZone = -Ground.radius;
+			int deletionZone = (int)(-Ground.radius);
 			if (leftMost.Position.X <= deletionZone) {
 				leftMost.IsRemoved = true;
 				return true;

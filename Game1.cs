@@ -194,11 +194,13 @@ namespace Snappy_Deluxe {
                 if (!isFullScreen) {
                     ChangeResolution(MaxWidth,MaxHeight, gameState, grounds, player);
                     PipeSpawner.SetScale(_graphics);
+                    Ground.Scale(_graphics);
                     isFullScreen = true;
                 }
                 else {
                     ChangeResolution(DefaultWidth,DefaultHeight, gameState, grounds, player); 
-                    PipeSpawner.SetScale(_graphics);
+                    PipeSpawner.SetScale(_graphics); 
+                    Ground.Scale(_graphics);
                     isFullScreen = false;
                 }
             }
