@@ -10,7 +10,7 @@ namespace Snappy_Deluxe {
         private const int defaultY = 760;
         private const int DefaultHalfWidth = 65;
         private const int DefaultHalfHeight = 400;
-        private const int defaultSpeed = 300; 
+        private const int DefaultSpeed = 300; 
         private const int DefaultWidth = 130; 
         private const int DefaultHeight = 800;
         private const float ScaleValueWidth = 9.8f;
@@ -19,18 +19,19 @@ namespace Snappy_Deluxe {
         // Instance Variables
         private Texture2D sprite;
         private Vector2 position;
-        private int speed; 
         private bool deleted; 
         private int halfWidth; 
         private int halfHeight;
         private int width;
         private int height;
-        private bool tagged;
+        private bool tagged; 
+        
+        // static variables 
+        private static int speed = DefaultSpeed;
 
         // Constructors 
         public Pipe(Texture2D sprite, int xPosition, int yPosition) {
             this.sprite = sprite;
-            this.speed = defaultSpeed;
             this.position = new Vector2(xPosition, yPosition);
             this.deleted = false;
             this.width = DefaultWidth;
@@ -88,7 +89,6 @@ namespace Snappy_Deluxe {
         public void Update(GameTime gameTime, GraphicsDeviceManager graphics) {            
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds; 
             position.X -= speed * deltaTime;
-            setScale(graphics);
         }
 
         /**
@@ -102,13 +102,6 @@ namespace Snappy_Deluxe {
             Rectangle drawPosition = new Rectangle((int)position.X-halfWidth, (int)position.Y-halfHeight, width, height);
             spriteBatch.Draw(sprite, drawPosition, Color.White);
         }
-
-        public void setScale(GraphicsDeviceManager graphics) {
-            width = (int)(graphics.PreferredBackBufferWidth / ScaleValueWidth);
-            height = (int)(graphics.PreferredBackBufferHeight / ScaleValueHeight);
-            halfWidth = width / 2; 
-            halfHeight = height / 2;
-        }
-
+         
     }
 }

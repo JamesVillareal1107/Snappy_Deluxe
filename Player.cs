@@ -85,10 +85,7 @@ namespace Snappy_Deluxe {
 
             // movement logic 
             Movement(gameTime, startState, manager);
-            Rotate(gameTime, manager); 
-            
-            // update scale when neccesary  
-            scale = graphics.PreferredBackBufferWidth / ScalingValue;
+            Rotate(gameTime, manager);
         }
         
         /**

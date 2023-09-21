@@ -64,8 +64,9 @@ namespace Snappy_Deluxe {
             // TODO: Add your initialization logic here 
 
             // Default Screensize
-            SetDefaultScreenResolution(); 
-            
+            _graphics.PreferredBackBufferWidth = DefaultWidth;
+            _graphics.PreferredBackBufferHeight = DefaultHeight;
+            _graphics.ApplyChanges();
 
             base.Initialize();
         }
@@ -125,8 +126,7 @@ namespace Snappy_Deluxe {
             
             // Toggle Fullscreen logic
             KeyboardState keyboardState = Keyboard.GetState();
-            ToggleFullScreen(keyboardState, oldKeyboardState, gameState, grounds, player); 
-            
+
             // prevent sticky keys
             oldKeyboardState = keyboardState;
             
@@ -146,65 +146,8 @@ namespace Snappy_Deluxe {
             base.Draw(gameTime);
         }
         
-        /**
-         * SetDefaultScreenResolution():
-         *
-         * Sets the default screen resolution for the game
-         * on start up
-         *
-         * @param: N/A
-         * @return: N/A
-         */
-        private void SetDefaultScreenResolution() {
-            _graphics.PreferredBackBufferWidth = width;
-            _graphics.PreferredBackBufferHeight = height;
-            _graphics.IsFullScreen = false;
-            _graphics.ApplyChanges();
-        } 
         
-        /**
-         * ChangeResolution Method:
-         *
-         * Changes the resolution of the
-         * screen
-         */
-        private void ChangeResolution(int width, int height, GameManager gameState, GroundManager grounds, Player player) {
-            _graphics.PreferredBackBufferWidth = width;
-            _graphics.PreferredBackBufferHeight = height;
-            _graphics.ApplyChanges();
-            base.Initialize();
-        }
-        
-        /**
-         * ToggleFullScreen Method:
-         *
-         * Switches the window size and pixel scaling
-         * between 1280x720 and 1920x1080 based on
-         * the value of isFullScreen
-         *
-         * @param: kState <keyboardState>
-         * @param: gameState <GameManager>
-         * @param: grounds <GroundManager>
-         * @param: player <Player>
-         * @return: N/A
-         * 
-         */
-        private void ToggleFullScreen(KeyboardState kState, KeyboardState oldKeyboardState, GameManager gameState, GroundManager grounds, Player player) {
-            if (kState.IsKeyDown(Keys.M) && oldKeyboardState.IsKeyUp(Keys.M)) {
-                if (!isFullScreen) {
-                    ChangeResolution(MaxWidth,MaxHeight, gameState, grounds, player);
-                    PipeSpawner.SetScale(_graphics);
-                    Ground.Scale(_graphics);
-                    isFullScreen = true;
-                }
-                else {
-                    ChangeResolution(DefaultWidth,DefaultHeight, gameState, grounds, player); 
-                    PipeSpawner.SetScale(_graphics); 
-                    Ground.Scale(_graphics);
-                    isFullScreen = false;
-                }
-            }
-        }
+      
         
     }
 }

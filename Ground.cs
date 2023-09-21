@@ -42,8 +42,7 @@ namespace Snappy_Deluxe {
             get { return position; } 
             set { position = value; }
         }
-
-        // Methods  
+        
 
         /** 
          * Update Method: 
@@ -71,20 +70,6 @@ namespace Snappy_Deluxe {
             spriteBatch.Draw(sprite, groundPosition, Color.White);
         }
         
-        /**
-         * Scale Method:
-         *
-         * scales the render variables of the
-         * ground sprite based on the window size
-         *
-         * @param: graphics <GraphicsDeviceManager>
-         * @return: N/A
-         */
-        public static void Scale(GraphicsDeviceManager graphics) {
-            width = graphics.PreferredBackBufferWidth;
-            height = graphics.PreferredBackBufferHeight / 7.5;
-            radius = graphics.PreferredBackBufferWidth / 2;
-            quarterHeight = graphics.PreferredBackBufferHeight / 30;
-        }
+        
     }
 }
